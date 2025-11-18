@@ -36,7 +36,8 @@
 - The local development Guide should include links to all needed resources & instructions for initial configuration of the environment
 - My local development host is a Macbook
 - Technical Design Docs are defined in App_Design_Instructions.md 
-- If the technical design document (./context/TechnicalDesign.md) has not been created, use the Application_Description.md to provide the context to create it. 
+- If the technical design document (./context/TechnicalDesign.md) has not been created, use the Application_Description.md to provide the context to create it in the context/ directory. 
+- If the Development plan document (./context/DevelopmentPlan.md) has not been created, create it in the context/ directory.
 - If the deployment guide (./context/Deployment.md) has not been created, guide me through creating it. 
 - The deployment guide is used to instruct developers or SRE on the process for deploying their code to GCP 
 - If the Developer's Local Environment Guide (./context/LocalDevGuide.md) has not been created, guide me through creating it. 
