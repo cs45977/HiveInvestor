@@ -47,8 +47,8 @@
 - When a Story is completed, the testing plan document must be updated to provide instructions for testing that story. 
 - The testing plans should be located at ./context/testing/FrontEndTestPlan.md for front end testing and ./context/testing/BackEndTestPlan.md for backend tests
 - Do not offer to start any local servers for me .  I will manually start, stop , or restart any servers
-- Do not offer to take any git actions for me.  I will manually add, commit, and push to git 
-- All files in the context directory need to be served in a web ui so that teams can review them in their browser 
+- Do not offer to take any git actions for me.  I will manually add, commit, and push to git
+- Insure the readme file has links to all the markdownfiles so they can be read from github
 - We will deploy our application to Google Cloud Platform
 - When creating a development plan create an epic 0 which allows for the creation of a "Hello world" app and its deployment.  The hello world app should be used that we can deploy and test our application both localy and to GCP                
 
