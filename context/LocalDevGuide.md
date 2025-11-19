@@ -40,7 +40,7 @@ We will use Vagrant to provision an Ubuntu Server VM for our development environ
       config.vm.box = "ubuntu/focal64"
       config.vm.network "forwarded_port", guest: 8000, host: 8000 # FastAPI
       config.vm.network "forwarded_port", guest: 8080, host: 8080 # Vue.js Dev Server
-      config.vm.synced_folder ".", "/vagrant_data" # Syncs your project folder to /vagrant_data in the VM
+      config.vm.synced_folder ".", "/vagrant" # Syncs your project folder to /vagrant in the VM
     end
     ```
 
@@ -65,7 +65,9 @@ Once you are SSHed into your Ubuntu VM, follow these steps to set up the develop
 ```bash
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y build-essential git curl
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
 ```
 
 ### 3.2. Python (Backend - FastAPI)
@@ -90,7 +92,7 @@ sudo apt install -y build-essential git curl
 3.  **Create a Virtual Environment:**
     Navigate to your synced project directory (where your backend code will reside).
     ```bash
-    cd /vagrant_data/backend # Assuming your backend code is in a 'backend' folder
+    cd /vagrant/backend # Assuming your backend code is in a 'backend' folder
     python -m venv venv
     source venv/bin/activate
     ```
@@ -123,7 +125,7 @@ sudo apt install -y build-essential git curl
 4.  **Create a Vue.js Project (if not already created):**
     Navigate to your synced project directory.
     ```bash
-    cd /vagrant_data/frontend # Assuming your frontend code is in a 'frontend' folder
+    cd /vagrant/frontend # Assuming your frontend code is in a 'frontend' folder
     # If using Vite:
     npm create vue@latest
     # Follow prompts, select Vue, JavaScript/TypeScript, Router, Pinia, etc.
@@ -140,7 +142,7 @@ sudo apt install -y build-essential git curl
 ### 4.1. Backend (FastAPI)
 
 1.  SSH into your VM: `vagrant ssh`
-2.  Navigate to your backend project directory: `cd /vagrant_data/backend`
+2.  Navigate to your backend project directory: `cd /vagrant/backend`
 3.  Activate your Python virtual environment: `source venv/bin/activate`
 4.  Run the FastAPI application:
     ```bash
@@ -151,7 +153,7 @@ sudo apt install -y build-essential git curl
 ### 4.2. Frontend (Vue.js)
 
 1.  SSH into your VM (if not already in a separate session): `vagrant ssh`
-2.  Navigate to your frontend project directory: `cd /vagrant_data/frontend/<your-vue-project-name>`
+2.  Navigate to your frontend project directory: `cd /vagrant/frontend/<your-vue-project-name>`
 3.  Run the Vue.js development server:
     ```bash
     npm run dev -- --host 0.0.0.0 --port 8080

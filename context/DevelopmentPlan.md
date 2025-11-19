@@ -9,15 +9,15 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 0.1: Backend Project Initialization (FastAPI)**
     *   **Description:** Initialize a new FastAPI project, set up basic project structure, and create a simple "Hello World" endpoint.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 0.2: Frontend Project Initialization (Vue.js with Tailwind CSS)**
     *   **Description:** Initialize a new Vue.js project, integrate Tailwind CSS, and create a simple "Hello World" component.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 0.3: Dockerization of Backend and Frontend**
     *   **Description:** Create Dockerfiles for both the FastAPI backend and the Vue.js frontend to enable containerized deployment.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 0.4: GCP Project Setup and Cloud Run Deployment for Backend**
     *   **Description:** Set up a GCP project, configure Cloud Run for the FastAPI backend, and deploy the "Hello World" endpoint.
