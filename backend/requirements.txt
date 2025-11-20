@@ -2,3 +2,9 @@ fastapi
 uvicorn[standard]
 pytest
 httpx
+google-cloud-firestore
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart
+pydantic-settings
+email-validator

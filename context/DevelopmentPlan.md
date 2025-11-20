@@ -46,11 +46,11 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 1.1: User Registration API Endpoint**
     *   **Description:** Following a test-first TDD approach, write failing unit tests that define the requirements for a user registration endpoint. Then, implement the FastAPI endpoint to make the tests pass, including password hashing and storage in Firestore.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 1.2: User Login API Endpoint (JWT)**
     *   **Description:** Implement a FastAPI endpoint for user login, generating and returning a JWT upon successful authentication.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 1.3: Frontend Registration Form**
     *   **Description:** Following a test-first TDD approach, write failing component tests that define the behavior of a user registration form. Then, create the Vue.js component to make the tests pass, ensuring it interacts correctly with the backend API.
@@ -62,7 +62,7 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 1.5: User Profile Management (Basic)**
     *   **Description:** Implement API endpoints and frontend components for users to view and update basic profile information.
-    *   **Status:** Not Started
+    *   **Status:** Complete (Backend Only)
 
 ## Epic 2: Portfolio Management and Trading
 **Objective:** Allow users to create and manage their investment portfolios, including buying and selling securities.
