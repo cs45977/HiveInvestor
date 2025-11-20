@@ -54,11 +54,11 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 1.3: Frontend Registration Form**
     *   **Description:** Following a test-first TDD approach, write failing component tests that define the behavior of a user registration form. Then, create the Vue.js component to make the tests pass, ensuring it interacts correctly with the backend API.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 1.4: Frontend Login Form**
     *   **Description:** Create a Vue.js component for user login, handling JWT storage and redirection upon successful login.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 1.5: User Profile Management (Basic)**
     *   **Description:** Implement API endpoints and frontend components for users to view and update basic profile information.

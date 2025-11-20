@@ -1,26 +1,51 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import flushPromises from 'flush-promises'
 import App from '../../App.vue'
+import { createRouter, createWebHistory, RouterLink, RouterView } from 'vue-router'
 
-// Mock the global fetch
-global.fetch = vi.fn(() =>
-  Promise.resolve({
-    ok: true,
-    json: () => Promise.resolve({ Hello: 'Test World' }),
-  })
-)
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      component: { template: '<div>Home</div>' }
+    },
+    {
+      path: '/register',
+      component: { template: '<div>Register</div>' }
+    },
+    {
+      path: '/login',
+      component: { template: '<div>Login</div>' }
+    }
+  ]
+})
 
 describe('App', () => {
-  it('renders the welcome message', () => {
-    const wrapper = mount(App)
-    expect(wrapper.text()).toContain('Welcome to HiveInvestor!')
+  it('renders the navigation links', async () => {
+    router.push('/')
+    await router.isReady()
+    const wrapper = mount(App, {
+      global: {
+        plugins: [router]
+      }
+    })
+    expect(wrapper.find('header').exists()).toBe(true)
+    expect(wrapper.find('nav').exists()).toBe(true)
+    expect(wrapper.findAllComponents(RouterLink).length).toBe(3) // Home, Register, Login
   })
 
-  it('displays success message and data after API call', async () => {
-    const wrapper = mount(App)
-    await flushPromises()
-    expect(wrapper.text()).toContain('Backend connection successful!')
-    expect(wrapper.text()).toContain('Backend says: "Test World"')
+  // This test was originally for backend API call, which is not in App.vue anymore.
+  // We'll update it to check for the presence of RouterView in the App.vue template
+  // after the routing is set up.
+  it('renders RouterView', async () => {
+    router.push('/')
+    await router.isReady()
+    const wrapper = mount(App, {
+      global: {
+        plugins: [router]
+      }
+    })
+    expect(wrapper.findComponent(RouterView).exists()).toBe(true)
   })
 })

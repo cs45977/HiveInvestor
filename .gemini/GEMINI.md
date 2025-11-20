@@ -73,10 +73,12 @@ Every step is mandatory.
 - Insure the readme file has links to all the markdown files so they can be read from github
 - We will deploy our application to Google Cloud Platform
 - When creating a development plan create an epic 0 which allows for the creation of a "Hello world" app and its deployment.  The hello world app should be used that we can deploy and test our application both localy and to GCP  
-- For simplicity , server the backend and frontend from same server port               
+- **Frontend-Backend Communication (Development):** To avoid Cross-Origin Resource Sharing (CORS) issues during local development, always configure the frontend development server (e.g., Vite) to proxy API requests to the backend. API endpoints should be accessed via a consistent path (e.g., `/api`) on the frontend, which the proxy then redirects to the backend server.
+- ui unittests need to be automated so as not to need user input to to achieve results ans so you can run the tests without my input      
+- Create a User Testing Guide that a human user can reference to understand how the application should run.  after each story is completed add a test for a human to execute  
+
 
 
 ###Reserve the bottom of the file for project level memory items
 - when building mermaid charts in markdown files. avoid special characters in the strings.
 - Do not perform git actions unless specifically prompted.
-- **Frontend-Backend Communication (Development):** To avoid Cross-Origin Resource Sharing (CORS) issues during local development, always configure the frontend development server (e.g., Vite) to proxy API requests to the backend. API endpoints should be accessed via a consistent path (e.g., `/api`) on the frontend, which the proxy then redirects to the backend server.
