@@ -71,27 +71,27 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 2.1: Portfolio Initialization API**
     *   **Description:** Implement a FastAPI endpoint to initialize a new user's portfolio with $100,000 virtual cash.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.2: External Market Data API Integration**
     *   **Description:** Integrate a third-party market data API to fetch real-time security quotes.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.3: Buy/Sell Trade API Endpoint**
     *   **Description:** Implement FastAPI endpoints for executing buy and sell orders, including validation, commission calculation, and portfolio updates.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.4: Frontend Portfolio Display**
     *   **Description:** Create Vue.js components to display the user's current portfolio holdings, cash balance, and total value.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.5: Frontend Trade Form**
     *   **Description:** Create a Vue.js component for users to input and execute buy/sell orders.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.6: Transaction History Display**
     *   **Description:** Implement API endpoints and frontend components to display a user's transaction history.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 ## Epic 3: Rolling Performance Evaluation and Leaderboards
 **Objective:** Implement the core logic for continuous portfolio evaluation and display rolling leaderboards.
