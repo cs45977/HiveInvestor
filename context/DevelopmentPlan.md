@@ -21,15 +21,23 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 0.4: GCP Project Setup and Cloud Run Deployment for Backend**
     *   **Description:** Set up a GCP project, configure Cloud Run for the FastAPI backend, and deploy the "Hello World" endpoint.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 0.5: GCP Cloud Storage/CDN Deployment for Frontend**
     *   **Description:** Configure Google Cloud Storage and Cloud CDN to host and serve the Vue.js "Hello World" frontend.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 0.6: Basic CI/CD Pipeline (Cloud Build)**
     *   **Description:** Implement a basic CI/CD pipeline using Cloud Build to automate the build and deployment of both frontend and backend "Hello World" applications.
-    *   **Status:** Not Started
+    *   **Status:** Complete
+
+*   **Story 0.7: Frontend to Backend Communication**
+    *   **Description:** Implement a simple API call from the Vue.js frontend to the FastAPI backend to ensure both are being served correctly and can communicate. This includes a visual and textual indicator on the frontend that shows the status of the backend connection, using humorous messages and GIFs for success and error states.
+    *   **Status:** Complete
+
+*   **Story 0.8: Set up Unit Testing Frameworks**
+    *   **Description:** Install and configure unit testing frameworks for both the frontend (Vitest) and backend (Pytest). Create an initial example test for both to ensure the testing pipeline is functional.
+    *   **Status:** Complete
 
 ## Epic 1: User Management and Authentication
 **Objective:** Enable users to register, log in, and manage their basic profiles.
@@ -37,7 +45,7 @@ This development plan outlines the epics and stories for building the HiveInvest
 ### Stories:
 
 *   **Story 1.1: User Registration API Endpoint**
-    *   **Description:** Implement a FastAPI endpoint for user registration, including password hashing and storage in Firestore.
+    *   **Description:** Following a test-first TDD approach, write failing unit tests that define the requirements for a user registration endpoint. Then, implement the FastAPI endpoint to make the tests pass, including password hashing and storage in Firestore.
     *   **Status:** Not Started
 
 *   **Story 1.2: User Login API Endpoint (JWT)**
@@ -45,7 +53,7 @@ This development plan outlines the epics and stories for building the HiveInvest
     *   **Status:** Not Started
 
 *   **Story 1.3: Frontend Registration Form**
-    *   **Description:** Create a Vue.js component for user registration, interacting with the backend API.
+    *   **Description:** Following a test-first TDD approach, write failing component tests that define the behavior of a user registration form. Then, create the Vue.js component to make the tests pass, ensuring it interacts correctly with the backend API.
     *   **Status:** Not Started
 
 *   **Story 1.4: Frontend Login Form**

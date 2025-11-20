@@ -72,10 +72,11 @@ Every step is mandatory.
 - Do not offer to take any git actions for me.  I will manually add, commit, and push to git
 - Insure the readme file has links to all the markdown files so they can be read from github
 - We will deploy our application to Google Cloud Platform
-- When creating a development plan create an epic 0 which allows for the creation of a "Hello world" app and its deployment.  The hello world app should be used that we can deploy and test our application both localy and to GCP                
+- When creating a development plan create an epic 0 which allows for the creation of a "Hello world" app and its deployment.  The hello world app should be used that we can deploy and test our application both localy and to GCP  
+- For simplicity , server the backend and frontend from same server port               
 
 
 ###Reserve the bottom of the file for project level memory items
 - when building mermaid charts in markdown files. avoid special characters in the strings.
 - Do not perform git actions unless specifically prompted.
-
+- **Frontend-Backend Communication (Development):** To avoid Cross-Origin Resource Sharing (CORS) issues during local development, always configure the frontend development server (e.g., Vite) to proxy API requests to the backend. API endpoints should be accessed via a consistent path (e.g., `/api`) on the frontend, which the proxy then redirects to the backend server.
