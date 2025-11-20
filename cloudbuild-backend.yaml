@@ -1,0 +1,31 @@
+steps:
+# 1. Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - 'build'
+    - '-t'
+    - 'us-central1-docker.pkg.dev/$PROJECT_ID/hive-investor-repo/hive-investor-backend:$COMMIT_SHA'
+    - '.'
+  dir: 'backend'
+
+# 2. Push the Docker image to Google Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - 'push'
+    - 'us-central1-docker.pkg.dev/$PROJECT_ID/hive-investor-repo/hive-investor-backend:$COMMIT_SHA'
+
+# 3. Deploy the image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+    - 'run'
+    - 'deploy'
+    - 'hive-investor-backend'
+    - '--image=us-central1-docker.pkg.dev/$PROJECT_ID/hive-investor-repo/hive-investor-backend:$COMMIT_SHA'
+    - '--region=us-central1'
+    - '--platform=managed'
+    - '--allow-unauthenticated'
+
+# Store the image name in the images log
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/hive-investor-repo/hive-investor-backend:$COMMIT_SHA'

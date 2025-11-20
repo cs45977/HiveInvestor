@@ -1,0 +1,33 @@
+steps:
+# 1. Install dependencies and build the static assets
+- name: 'node:18'
+  entrypoint: 'npm'
+  args: ['install']
+  dir: 'frontend'
+- name: 'node:18'
+  entrypoint: 'npm'
+  args: ['run', 'build']
+  dir: 'frontend'
+
+# 2. Upload the built assets to Google Cloud Storage
+# The BUCKET_NAME should be replaced with the name of your GCS bucket.
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gsutil'
+  args:
+    - '-m'
+    - 'rsync'
+    - '-r'
+    - '-c'
+    - '-d'
+    - 'frontend/dist'
+    - 'gs://<YOUR_GCS_BUCKET_NAME>'
+
+# 3. Set public access on the bucket (for initial setup)
+# Note: For production, you would likely have a more granular security policy.
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gsutil'
+  args:
+    - 'iam'
+    - 'ch'
+    - 'allUsers:objectViewer'
+    - 'gs://<YOUR_GCS_BUCKET_NAME>'
