@@ -100,19 +100,19 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 3.1: PPG Calculation Logic**
     *   **Description:** Develop the backend logic for calculating Percentage Portfolio Gain (PPG) for individual portfolios over various timeframes.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 3.2: Scheduled Portfolio Evaluation (Cloud Functions/Cloud Run Jobs)**
     *   **Description:** Implement a scheduled GCP service (Cloud Functions or Cloud Run Jobs) to periodically recalculate PPG for all active users.
-    *   **Status:** Not Started
+    *   **Status:** Complete (Implemented as Admin API triggerable by Scheduler)
 
 *   **Story 3.3: Leaderboard API Endpoints**
     *   **Description:** Implement FastAPI endpoints to retrieve 1-day, 7-day, 30-day, and 90-day PPG leaderboards.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 3.4: Frontend Leaderboard Display**
     *   **Description:** Create Vue.js components to display the various rolling leaderboards.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 ## Epic 4: Documentation and Testing Plans
 **Objective:** Create comprehensive documentation for local development, deployment, and testing.
@@ -121,16 +121,16 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 4.1: Local Development Guide**
     *   **Description:** Create a detailed guide for setting up the local development environment for both frontend and backend.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 4.2: Deployment Guide**
     *   **Description:** Create a comprehensive guide for deploying the HiveInvestor application to Google Cloud Platform.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 4.3: Backend Testing Plan**
     *   **Description:** Create a document outlining the testing strategy and specific test cases for the FastAPI backend.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 4.4: Frontend Testing Plan**
     *   **Description:** Create a document outlining the testing strategy and specific test cases for the Vue.js frontend.
-    *   **Status:** Not Started
+    *   **Status:** Complete

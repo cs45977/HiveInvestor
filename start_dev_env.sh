@@ -22,7 +22,7 @@ VAGRANT_CMD="
     (
         cd /vagrant/backend &&
         echo '[Backend] Activating Python virtual environment...' &&
-        source venv/bin/activate &&
+        source /vagrant/backend/.venv/bin/activate &&
         echo '[Backend] Starting Uvicorn server...' &&
         uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     ) >> /log/web_service.log 2>&1 &
