@@ -174,3 +174,21 @@ Before testing, ensure the local development environment is running:
     *   Click **Submit Trade**.
     *   **Expected Result:** Success message. Holdings table updates (quantity decreases). Cash balance increases.
 4.  **Status:** [ ] Pass / [ ] Fail
+
+## Epic 3: Performance & Leaderboards
+
+### Test 3.1: Trigger Evaluation (Admin)
+*Note: This simulates the daily scheduled job.*
+1.  **Login via API Docs**.
+2.  Find `POST /api/v1/admin/evaluate`.
+3.  Click **Execute**.
+4.  **Expected Result**: 200 OK. "Evaluation triggered successfully". This updates total values, takes snapshots, and generates leaderboards.
+5.  **Status:** [ ] Pass / [ ] Fail
+
+### Test 3.2: View Leaderboard (UI)
+1.  Navigate to `/leaderboard`.
+2.  Select different time windows (1d, 7d, etc.).
+3.  **Expected Result**:
+    *   If data exists (after triggering evaluation and having history), a table of users ranked by PPG appears.
+    *   If no data, "No data available" message.
+4.  **Status:** [ ] Pass / [ ] Fail

@@ -45,18 +45,78 @@ export const getQuote = async (symbol) => {
 
 export const getTransactions = async () => {
 
+
+
     const token = localStorage.getItem('token')
+
+
 
     const response = await axios.get(`${API_URL}/transactions/`, {
 
+
+
         headers: {
+
+
 
             'Authorization': `Bearer ${token}`
 
+
+
         }
+
+
 
     })
 
+
+
     return response.data
 
+
+
 }
+
+
+
+
+
+
+
+export const getLeaderboard = async (window) => {
+
+
+
+    const token = localStorage.getItem('token')
+
+
+
+    const response = await axios.get(`${API_URL}/leaderboard/${window}`, {
+
+
+
+        headers: {
+
+
+
+            'Authorization': `Bearer ${token}`
+
+
+
+        }
+
+
+
+    })
+
+
+
+    return response.data
+
+
+
+}
+
+
+
+
