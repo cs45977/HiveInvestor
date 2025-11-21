@@ -71,27 +71,27 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 2.1: Portfolio Initialization API**
     *   **Description:** Implement a FastAPI endpoint to initialize a new user's portfolio with $100,000 virtual cash.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.2: External Market Data API Integration**
     *   **Description:** Integrate a third-party market data API to fetch real-time security quotes.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.3: Buy/Sell Trade API Endpoint**
     *   **Description:** Implement FastAPI endpoints for executing buy and sell orders, including validation, commission calculation, and portfolio updates.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.4: Frontend Portfolio Display**
     *   **Description:** Create Vue.js components to display the user's current portfolio holdings, cash balance, and total value.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.5: Frontend Trade Form**
     *   **Description:** Create a Vue.js component for users to input and execute buy/sell orders.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 2.6: Transaction History Display**
     *   **Description:** Implement API endpoints and frontend components to display a user's transaction history.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 ## Epic 3: Rolling Performance Evaluation and Leaderboards
 **Objective:** Implement the core logic for continuous portfolio evaluation and display rolling leaderboards.
@@ -100,19 +100,19 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 3.1: PPG Calculation Logic**
     *   **Description:** Develop the backend logic for calculating Percentage Portfolio Gain (PPG) for individual portfolios over various timeframes.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 3.2: Scheduled Portfolio Evaluation (Cloud Functions/Cloud Run Jobs)**
     *   **Description:** Implement a scheduled GCP service (Cloud Functions or Cloud Run Jobs) to periodically recalculate PPG for all active users.
-    *   **Status:** Not Started
+    *   **Status:** Complete (Implemented as Admin API triggerable by Scheduler)
 
 *   **Story 3.3: Leaderboard API Endpoints**
     *   **Description:** Implement FastAPI endpoints to retrieve 1-day, 7-day, 30-day, and 90-day PPG leaderboards.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 3.4: Frontend Leaderboard Display**
     *   **Description:** Create Vue.js components to display the various rolling leaderboards.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 ## Epic 4: Documentation and Testing Plans
 **Objective:** Create comprehensive documentation for local development, deployment, and testing.
@@ -121,16 +121,16 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 4.1: Local Development Guide**
     *   **Description:** Create a detailed guide for setting up the local development environment for both frontend and backend.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 4.2: Deployment Guide**
     *   **Description:** Create a comprehensive guide for deploying the HiveInvestor application to Google Cloud Platform.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 4.3: Backend Testing Plan**
     *   **Description:** Create a document outlining the testing strategy and specific test cases for the FastAPI backend.
-    *   **Status:** Not Started
+    *   **Status:** Complete
 
 *   **Story 4.4: Frontend Testing Plan**
     *   **Description:** Create a document outlining the testing strategy and specific test cases for the Vue.js frontend.
-    *   **Status:** Not Started
+    *   **Status:** Complete

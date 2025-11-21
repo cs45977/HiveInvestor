@@ -31,9 +31,9 @@ Every step is mandatory.
   - Outlines the key elements of a Web Application Design Document
 - @./Test_Driven_Instructions.md 
   - Describes our Test Driven development process. 
-- @./context/VisualDesign/styleguide.pdf (optional)
-  - Describes the look and feel of our application UI
-
+### Styleguide
+- Follow the style rules found at https://cs45977.github.io/aiCodeStart/styleguide.html 
+ 
 ### Files created by Gemini as the project is generated.
 - @./context/DevelopmentPlan.md
   - Outlines the epics and stories for building the HiveInvestor application, following a FastAPI backend, Vue.js frontend, and Google Cloud Platform deployment strategy. Each story will include its current status.
