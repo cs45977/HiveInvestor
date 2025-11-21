@@ -39,6 +39,14 @@ This development plan outlines the epics and stories for building the HiveInvest
     *   **Description:** Install and configure unit testing frameworks for both the frontend (Vitest) and backend (Pytest). Create an initial example test for both to ensure the testing pipeline is functional.
     *   **Status:** Complete
 
+*   **Story 0.9: Enhanced Backend and Database Connection Check**
+    *   **Description:** Improve the backend health check endpoint to verify connectivity with the Firestore database. Update the frontend to display detailed status indicators for both the backend service and the database connection, distinguishing between development and production environments.
+    *   **Status:** Complete
+
+*   **Story 0.10: Local Testing Database Setup (Firestore Emulator)**
+    *   **Description:** Set up the Firestore Emulator in the local development environment to serve as a testing database. Ensure the backend connects to this local emulator when running in development mode. Update the Local Development Guide with instructions for running the emulator.
+    *   **Status:** Complete
+
 ## Epic 1: User Management and Authentication
 **Objective:** Enable users to register, log in, and manage their basic profiles.
 
