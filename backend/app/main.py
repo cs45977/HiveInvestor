@@ -17,4 +17,27 @@ def read_root():
 
 @app.get("/api/status")
 def get_status():
-    return {"status": "Backend Connected"}
+    from app.db.firestore import get_db
+    from google.cloud import firestore
+    
+    db_status = "Disconnected"
+    try:
+        db = get_db()
+        # Attempt a lightweight operation to verify connection
+        # We just check if we can get a collection reference (client initialization check)
+        # For a deeper check, we'd try to read a doc, but client init is usually enough to catch config errors
+        # To be sure, let's try to list collections (might be empty, that's fine)
+        # Note: list_collections is a generator.
+        # Simply initializing the client often doesn't throw until a request is made.
+        # We will try to access a dummy document.
+        doc_ref = db.collection("health").document("ping")
+        doc = doc_ref.get()
+        db_status = "Connected" 
+    except Exception as e:
+        # If it fails (e.g. auth error, connection refused), we catch it
+        db_status = f"Disconnected: {str(e)}"
+
+    return {
+        "backend_status": "Connected",
+        "db_status": db_status
+    }

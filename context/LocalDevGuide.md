@@ -160,6 +160,12 @@ xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
     ```
     Your frontend will be accessible from your host machine at `http://localhost:8080`.
 
+    **Note on Development Status:**
+    On the Home View (http://localhost:8080), you will see a "Development Status" box. This indicator confirms if the frontend is successfully communicating with:
+    *   **Backend:** The FastAPI server is running and reachable.
+    *   **Database:** The backend is successfully connected to the Firestore database (or Emulator).
+    Green indicators mean systems are operational. Red indicators imply a configuration or connection issue.
+
 ## 5. Google Cloud SDK (Optional, for local GCP interaction)
 
 If you need to interact with GCP services directly from your VM (e.g., for local Firestore emulation), install the Google Cloud SDK.
@@ -177,7 +183,45 @@ If you need to interact with GCP services directly from your VM (e.g., for local
     ```
     Follow the prompts to log in with your Google account and configure your project.
 
-## 6. Shutting Down the VM
+## 6. Local Database Setup (Firestore Emulator)
+
+To test database interactions without connecting to the live GCP Firestore instance, we use the Firebase Local Emulator Suite.
+
+### 6.1. Install Java (Required for Emulators)
+The emulator requires Java to run.
+```bash
+sudo apt install openjdk-11-jre-headless -y
+```
+
+### 6.2. Install Firebase CLI
+```bash
+npm install -g firebase-tools
+```
+
+### 6.3. Initialize Firebase (First Time Only)
+Navigate to the backend directory and initialize the emulator.
+```bash
+cd /vagrant/backend
+firebase login --no-localhost  # Follow instructions to auth via host browser
+firebase init emulators
+# Select 'Firestore'
+# Accept default ports
+```
+
+### 6.4. Run the Emulator
+```bash
+firebase emulators:start --only firestore
+```
+This will start the emulator, typically on port 8080 (check output, it might conflict with Vue so you might need to change the port in firebase.json to e.g., 8090).
+
+### 6.5. Connect Backend to Emulator
+Set the environment variable before starting the backend:
+```bash
+export FIRESTORE_EMULATOR_HOST="localhost:8080" 
+# (Replace 8080 with the actual port configured in 6.4)
+```
+
+## 7. Shutting Down the VM
 
 When you are done developing, you can shut down the VM from your host machine:
 
