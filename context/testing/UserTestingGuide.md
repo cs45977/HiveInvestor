@@ -85,137 +85,64 @@ Before testing, ensure the local development environment is running:
 4.  **Expected Result:** An error message "Incorrect email or password" (or similar) appears below the form.
 5.  **Status:** [ ] Pass / [ ] Fail
 
----
-
-## Epic 1.5: Role-Based Access & Navigation
-
-### Test 1.5.1: First Registered User is Admin & Admin Navigation
-*Prerequisite: Ensure your Firestore emulator data for 'users' collection is empty. You can do this via `http://127.0.0.1:4000/firestore` by deleting the 'users' collection, or by restarting the emulator with fresh data.*
-1.  Navigate to `http://localhost:5173/register`.
-2.  Register a new user (e.g., Email: `admin@example.com`, Username: `adminuser`, Password: `AdminP@ss1`).
-3.  **Expected Result:**
-    *   You are automatically logged in and redirected to the `/dashboard` page.
-    *   The navigation bar displays: "Logged in as: adminuser", "Logout", "Home", "Dashboard", "Leaderboard", and an "**Admin**" link.
-4.  **Verify Admin Role in Firestore:**
-    *   Go to `http://127.0.0.1:4000/firestore`.
-    *   Find the `users` collection and the `adminuser` document.
-    *   **Expected:** The document should contain a field `role: "admin"`.
-5.  **Status:** [ ] Pass / [ ] Fail
-
-### Test 1.5.2: Subsequent Registered User is Regular User & User Navigation
-*Prerequisite: Complete Test 1.5.1 so an admin user exists.*
-1.  If logged in as `adminuser`, click the "Logout" button.
-2.  Navigate to `http://localhost:5173/register`.
-3.  Register another new user (e.g., Email: `regular@example.com`, Username: `regularuser`, Password: `RegularP@ss1`).
-4.  **Expected Result:**
-    *   You are automatically logged in and redirected to the `/dashboard` page.
-    *   The navigation bar displays: "Logged in as: regularuser", "Logout", "Home", "Dashboard", "Leaderboard". The "**Admin**" link should **NOT** be visible.
-5.  **Verify User Role in Firestore:**
-    *   Go to `http://127.0.0.1:4000/firestore`.
-    *   Find the `users` collection and the `regularuser` document.
-    *   **Expected:** The document should contain a field `role: "user"`.
-6.  **Status:** [ ] Pass / [ ] Fail
-
-### Test 1.5.3: Guest Navigation
-*Prerequisite: Logged out from any user.*
-1.  If logged in, click the "Logout" button.
-2.  Navigate to `http://localhost:5173/` (Home page).
-3.  **Expected Result:**
-    *   The navigation bar displays: "Home", "Login", "Register".
-    *   "Dashboard", "Leaderboard", "Admin", "Logged in as...", and "Logout" links should **NOT** be visible.
+### Test 1.5: User Profile Management
+*Prerequisite: Logged in as a registered user.*
+1.  **Navigate to Profile:**
+    *   Click the "Profile" link in the navigation bar (or go to `/profile`).
+    *   **Expected Result:** You see the "User Profile" page with your Email (disabled) and Username (editable).
+2.  **Update Username:**
+    *   Change the **Username** to a new value (e.g., `newusername`).
+    *   Click **Update Profile**.
+    *   **Expected Result:** Success message "Profile updated successfully" appears.
+    *   The navigation bar now displays "Logged in as: newusername".
+3.  **Verify Persistence:**
+    *   Refresh the page.
+    *   **Expected Result:** The Username field still shows `newusername`.
 4.  **Status:** [ ] Pass / [ ] Fail
 
 ---
 
 ## Epic 2: Portfolio Management
 
-### Test 2.1: Initialize Portfolio (via API Docs)
-*Note: Frontend UI for this is not yet implemented. Use Swagger UI.*
-
-1.  **Login via API Docs:**
-    *   Go to `http://localhost:8000/docs`.
-    *   Click the **Authorize** button (top right).
-    *   Enter `username` (email from Test 1.1) and `password`.
-    *   Click **Authorize**, then **Close**.
-2.  **Create Portfolio:**
-    *   Find `POST /api/v1/portfolios/`.
-    *   Click **Try it out** -> **Execute**.
-    *   **Expected Result:** Response code `201 Created`. JSON body shows `"cash_balance": 100000.0`.
-3.  **Verify Portfolio Retrieval:**
-    *   Find `GET /api/v1/portfolios/me`.
-    *   Click **Try it out** -> **Execute**.
-    *   **Expected Result:** Response code `200 OK`. JSON body matches the created portfolio.
-4.  **Duplicate Creation Check:**
-    *   Execute `POST /api/v1/portfolios/` again.
-    *   **Expected Result:** Response code `400 Bad Request`.
-5.  **Status:** [ ] Pass / [ ] Fail
-
-### Test 2.2: Get Stock Quote (via API Docs)
-1.  **Get Quote:**
-    *   Find `GET /api/v1/market/quote/{symbol}`.
-    *   Click **Try it out**.
-    *   Enter `symbol`: `AAPL`.
-    *   Click **Execute**.
-    *   **Expected Result:** Response code `200 OK`. JSON body shows `price`, `change`, etc. (Note: If API key is invalid/mock, it might return error or mock data depending on config. Currently configured with 'mock-key', so expect 404 or 503 unless key is set).
-2.  **Invalid Symbol:**
-    *   Enter `symbol`: `INVALID123`.
-    *   Click **Execute**.
-    *   **Expected Result:** Response code `404 Not Found` or `503` depending on API response.
-3.  **Status:** [ ] Pass / [ ] Fail
-
-### Test 2.3: Execute Trade (via API Docs)
-1.  **Buy Stock:**
-    *   Find `POST /api/v1/trade/`.
-    *   Click **Try it out**.
-    *   Enter JSON Request:
-        ```json
-        {
-          "symbol": "AAPL",
-          "quantity": 10,
-          "type": "BUY"
-        }
-        ```
-    *   Click **Execute**.
-    *   **Expected Result:** Response code `200 OK`. JSON shows `total_amount` (approx Price*10 + 10).
-2.  **Verify Portfolio Update:**
-    *   Find `GET /api/v1/portfolios/me`.
-    *   Click **Execute**.
-    *   **Expected Result:** `cash_balance` decreased by total amount. `holdings` includes AAPL: 10.
-3.  **Sell Stock:**
-    *   Find `POST /api/v1/trade/`.
-    *   Enter JSON Request:
-        ```json
-        {
-          "symbol": "AAPL",
-          "quantity": 5,
-          "type": "SELL"
-        }
-        ```
-    *   Click **Execute**.
-    *   **Expected Result:** Response code `200 OK`.
-4.  **Verify Portfolio Update (Sell):**
-    *   Execute `GET /api/v1/portfolios/me` again.
-    *   **Expected Result:** `cash_balance` increased. `holdings` AAPL quantity is 5.
-5.  **Status:** [ ] Pass / [ ] Fail
-
-### Test 2.4: Dashboard & Trading (UI)
+### Test 2.1: Portfolio Initialization (Automatic)
+*Prerequisite: Logged in as a new user.*
 1.  **Navigate to Dashboard:**
-    *   Log in to the application.
-    *   Go to `/dashboard` (or click Dashboard link if available).
-    *   **Expected Result:** You see "Cash Balance", "Total Portfolio Value", "Holdings", "Transaction History", and "Execute Trade" form.
-2.  **Buy Stock UI:**
+    *   Click the "Dashboard" link.
+    *   **Expected Result:**
+        *   The Dashboard page loads.
+        *   "Cash Balance" shows `$100,000.00`.
+        *   "Total Portfolio Value" shows `$100,000.00`.
+        *   "Holdings" table is empty.
+2.  **Status:** [ ] Pass / [ ] Fail
+
+### Test 2.2: Dashboard & Trading (UI)
+1.  **Buy Stock:**
+    *   On the Dashboard, find the "Execute Trade" form.
     *   Enter Symbol: `AAPL`.
-    *   Enter Qty: `2`.
+    *   Enter Qty: `10`.
     *   Select Type: `BUY`.
     *   Click **Submit Trade**.
-    *   **Expected Result:** Success message appears. Holdings table updates to show AAPL (or increase quantity). Cash balance decreases. Transaction History adds a row.
-3.  **Sell Stock UI:**
+    *   **Expected Result:**
+        *   Success message appears.
+        *   "Holdings" table adds a row for AAPL with Qty 10.
+        *   "Cash Balance" decreases by (Price * 10 + Commission).
+        *   "Transaction History" adds a BUY record.
+2.  **Sell Stock:**
     *   Enter Symbol: `AAPL`.
-    *   Enter Qty: `1`.
+    *   Enter Qty: `5`.
     *   Select Type: `SELL`.
     *   Click **Submit Trade**.
-    *   **Expected Result:** Success message. Holdings table updates (quantity decreases). Cash balance increases.
+    *   **Expected Result:**
+        *   Success message appears.
+        *   "Holdings" table updates AAPL Qty to 5.
+        *   "Cash Balance" increases by (Price * 5 - Commission).
+        *   "Transaction History" adds a SELL record.
+3.  **Insufficient Funds (Validation):**
+    *   Try to BUY a large quantity (e.g., 100000 AAPL) that exceeds cash.
+    *   **Expected Result:** Error message "Insufficient funds" (or similar) appears.
 4.  **Status:** [ ] Pass / [ ] Fail
+
+---
 
 ## Epic 3: Performance & Leaderboards
 

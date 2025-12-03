@@ -1,26 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import RegisterForm from '../RegisterForm.vue'
-import { register } from '../../../services/auth'
-import { useRouter } from 'vue-router'
+import { useAuthStore } from '../../../stores/auth'
 
-// Mock the router
-vi.mock('vue-router', () => ({
-  useRouter: vi.fn(() => ({
-    push: vi.fn()
-  })),
-  RouterLink: { template: '<a><slot /></a>' },
-  RouterView: { template: '<div><slot /></div>' }
-}))
-
-// Mock the auth service
-vi.mock('../../../services/auth', () => ({
-  register: vi.fn()
+// Mock the auth store composable
+vi.mock('../../../stores/auth', () => ({
+  useAuthStore: vi.fn()
 }))
 
 describe('RegisterForm', () => {
+  let registerAndLoginMock
+
   beforeEach(() => {
     vi.clearAllMocks()
+    registerAndLoginMock = vi.fn()
+    useAuthStore.mockReturnValue({
+      registerAndLogin: registerAndLoginMock
+    })
   })
 
   it('renders registration form correctly', () => {
@@ -83,11 +79,7 @@ describe('RegisterForm', () => {
   })
 
   it('handles successful registration submission', async () => {
-    const mockPush = vi.fn()
-    useRouter.mockReturnValue({ push: mockPush })
-
-    register.mockResolvedValue({ id: 'user-id', email: 'test@example.com', username: 'testuser' })
-
+    registerAndLoginMock.mockResolvedValue(true)
     const wrapper = mount(RegisterForm)
 
     await wrapper.find('input[type="email"]').setValue('test@example.com')
@@ -97,17 +89,14 @@ describe('RegisterForm', () => {
 
     await wrapper.find('form').trigger('submit')
 
-    // Wait for promises to resolve
-    await new Promise(resolve => setImmediate(resolve))
-    
-    expect(register).toHaveBeenCalledWith('test@example.com', 'testuser', 'StrongP@ss1!')
-    expect(mockPush).toHaveBeenCalledWith('/') 
+    expect(registerAndLoginMock).toHaveBeenCalledWith('test@example.com', 'testuser', 'StrongP@ss1!')
+    // Success message is shown upon promise resolution
+    await new Promise(resolve => setTimeout(resolve, 0))
     expect(wrapper.find('.success-message').text()).toBe('Registration successful!')
   })
 
   it('handles duplicate email error from API', async () => {
-     register.mockRejectedValue({ response: { data: { detail: 'Email already registered' } } })
-
+    registerAndLoginMock.mockRejectedValue({ response: { data: { detail: 'Email already registered' } } })
     const wrapper = mount(RegisterForm)
 
     await wrapper.find('input[type="email"]').setValue('duplicate@example.com')
@@ -117,16 +106,14 @@ describe('RegisterForm', () => {
 
     await wrapper.find('form').trigger('submit')
     
-    // Wait for promises to resolve
-    await new Promise(resolve => setImmediate(resolve))
+    await new Promise(resolve => setTimeout(resolve, 0))
 
-    expect(register).toHaveBeenCalled()
+    expect(registerAndLoginMock).toHaveBeenCalled()
     expect(wrapper.find('.error-message').text()).toBe('Email already registered')
   })
 
   it('handles generic API error', async () => {
-    register.mockRejectedValue(new Error('Network error'))
-
+    registerAndLoginMock.mockRejectedValue(new Error('Network error'))
     const wrapper = mount(RegisterForm)
 
     await wrapper.find('input[type="email"]').setValue('generic@example.com')
@@ -136,10 +123,9 @@ describe('RegisterForm', () => {
 
     await wrapper.find('form').trigger('submit')
     
-    // Wait for promises to resolve
-    await new Promise(resolve => setImmediate(resolve))
+    await new Promise(resolve => setTimeout(resolve, 0))
 
-    expect(register).toHaveBeenCalled()
+    expect(registerAndLoginMock).toHaveBeenCalled()
     expect(wrapper.find('.error-message').text()).toBe('An unexpected error occurred.')
   })
 })
