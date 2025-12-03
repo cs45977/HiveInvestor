@@ -86,7 +86,7 @@ def test_get_portfolio_success():
     assert data["cash_balance"] == 100000.0
     assert data["user_id"] == "test_user_id"
 
-def test_get_portfolio_not_found():
+def test_get_portfolio_auto_creation():
     mock_db = MagicMock()
     app.dependency_overrides[get_db] = lambda: mock_db
     
@@ -98,5 +98,11 @@ def test_get_portfolio_not_found():
 
     response = client.get("/api/v1/portfolios/me")
     
-    assert response.status_code == 404
-    assert response.json()["detail"] == "Portfolio not found"
+    # Assert that instead of 404, we get 200 and a new portfolio
+    assert response.status_code == 200
+    data = response.json()
+    assert data["cash_balance"] == 100000.0
+    assert data["user_id"] == "test_user_id"
+    
+    # Verify that set() was called to create the new portfolio
+    assert mock_portfolio_ref.set.called
