@@ -70,7 +70,7 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 1.5: User Profile Management (Basic)**
     *   **Description:** Implement API endpoints and frontend components for users to view and update basic profile information.
-    *   **Status:** Complete (Backend Only)
+    *   **Status:** Complete
 
 ## Epic 2: Portfolio Management and Trading
 **Objective:** Allow users to create and manage their investment portfolios, including buying and selling securities.

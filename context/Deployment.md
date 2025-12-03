@@ -249,14 +249,41 @@ gcloud scheduler jobs create pubsub daily-portfolio-evaluation \
 
 ## 7. Secrets Management (Google Secret Manager)
 
-1.  **Store your secrets:**
+### 7.1 Finnhub API Setup
+HiveInvestor uses **Finnhub.io** for real-time stock quotes. You must obtain an API key and configure it for the application to function correctly in production.
+
+1.  **Obtain API Key:**
+    *   Register at [Finnhub.io](https://finnhub.io/).
+    *   Get your free or paid API key from the dashboard.
+
+2.  **Store the API Key in Secret Manager:**
     ```bash
-    echo -n "your-api-key-value" | gcloud secrets create API_KEY --data-file=-
+    echo -n "YOUR_FINNHUB_API_KEY" | gcloud secrets create FINNHUB_API_KEY --data-file=-
     ```
+
+### 7.2 Other Secrets
+1.  **Store other secrets (e.g., JWT Secret):**
+    ```bash
+    echo -n "your-jwt-secret-value" | gcloud secrets create SECRET_KEY --data-file=-
+    ```
+
 2.  **Grant access to Cloud Run Service Account:**
     Ensure the Cloud Run service account (`PROJECT_NUMBER-compute@developer.gserviceaccount.com`) has the `Secret Manager Secret Accessor` role.
 
 ## 8. Continuous Integration/Continuous Deployment (CI/CD)
+
+### Updated Backend Deployment Command
+When deploying the backend to Cloud Run, ensure you inject the secrets as environment variables:
+
+```bash
+gcloud run deploy hiveinvestor-backend \
+    --image gcr.io/YOUR_GCP_PROJECT_ID/hiveinvestor-backend \
+    --platform managed \
+    --region YOUR_GCP_REGION \
+    --allow-unauthenticated \
+    --set-env-vars GOOGLE_CLOUD_PROJECT=YOUR_GCP_PROJECT_ID \
+    --update-secrets FINNHUB_API_KEY=FINNHUB_API_KEY:latest,SECRET_KEY=SECRET_KEY:latest
+```
 
 Consider using Cloud Build to automate the build, test, and deployment process for both frontend and backend. This typically involves creating `cloudbuild.yaml` files in your repositories.
 

@@ -92,5 +92,58 @@ def test_read_users_me_with_mocked_user():
     data = response.json()
     assert data["email"] == "test@example.com"
 
+def test_register_first_user_is_admin():
+    mock_db = MagicMock()
+    mock_collection = mock_db.collection.return_value
+    
+    # 1. Mock duplicate email check (where().limit().stream() -> empty)
+    mock_collection.where.return_value.stream.return_value = []
+    
+    # 2. Mock first user check (limit(1).stream() -> empty)
+    # Note: In the implementation, we might call db.collection("users").limit(1)
+    # We need to distinguish this from the where() call if possible, or just ensure both return empty.
+    # Using side_effect or separate mocks for chained calls is robust.
+    mock_collection.limit.return_value.stream.return_value = []
+
+    app.dependency_overrides[get_db] = lambda: mock_db
+    
+    payload = {
+        "email": "admin@example.com",
+        "username": "admin",
+        "password": "adminpassword"
+    }
+    
+    response = client.post("/api/v1/users/register", json=payload)
+    
+    assert response.status_code == 201
+    data = response.json()
+    assert data["username"] == "admin"
+    assert data.get("role") == "admin"
+
+def test_register_second_user_is_user():
+    mock_db = MagicMock()
+    mock_collection = mock_db.collection.return_value
+    
+    # 1. Mock duplicate email check (where()... -> empty) - New user is unique
+    mock_collection.where.return_value.stream.return_value = []
+    
+    # 2. Mock first user check (limit(1).stream() -> NOT empty) - Users exist
+    mock_collection.limit.return_value.stream.return_value = ["some_existing_user"]
+
+    app.dependency_overrides[get_db] = lambda: mock_db
+    
+    payload = {
+        "email": "user@example.com",
+        "username": "user",
+        "password": "userpassword"
+    }
+    
+    response = client.post("/api/v1/users/register", json=payload)
+    
+    assert response.status_code == 201
+    data = response.json()
+    assert data["username"] == "user"
+    assert data.get("role") == "user"
+
 
 

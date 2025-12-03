@@ -51,8 +51,9 @@ Before testing, ensure the local development environment is running:
 6.  Click **Register**.
 7.  **Expected Result:**
     *   A success message "Registration successful!" appears.
-    *   You are redirected to the Home page (or Login page, depending on current flow).
-    *   *(Optional)* Check backend logs or Firestore to verify user creation.
+    *   You are **automatically logged in and redirected to the `/dashboard` page**.
+    *   The navigation bar shows "Logged in as: testuser" and a "Logout" button.
+    *   *(Optional)* Check Firestore at `http://127.0.0.1:4000/firestore` to verify user creation in the `users` collection with a `role` field.
 8.  **Status:** [ ] Pass / [ ] Fail
 
 ### Test 1.2: User Registration (Validation Failure)
@@ -66,22 +67,63 @@ Before testing, ensure the local development environment is running:
 5.  **Status:** [ ] Pass / [ ] Fail
 
 ### Test 1.3: User Login (Success)
-*Prerequisite: Complete Test 1.1 successfully.*
+*Prerequisite: Complete Test 1.1 successfully, or have an existing registered user.*
 1.  Navigate to `http://localhost:5173/login`.
 2.  Enter the **Email** registered in Test 1.1.
 3.  Enter the **Password** registered in Test 1.1.
 4.  Click **Login**.
 5.  **Expected Result:**
-    *   You are redirected to the Home page.
-    *   (Technical Check): Open Developer Tools -> Application -> Local Storage (or Console logs if implemented) to verify a JWT token is received/stored.
+    *   You are **redirected to the `/dashboard` page**.
+    *   The navigation bar shows "Logged in as: [your username]" and a "Logout" button.
+    *   (Technical Check): Open Developer Tools -> Application -> Local Storage to verify a `token` and `user` object are stored.
 6.  **Status:** [ ] Pass / [ ] Fail
 
 ### Test 1.4: User Login (Failure)
 1.  Navigate to `http://localhost:5173/login`.
 2.  Enter an unregistered **Email** or a wrong **Password**.
 3.  Click **Login**.
-4.  **Expected Result:** An error message "Incorrect email or password" (or similar) appears.
+4.  **Expected Result:** An error message "Incorrect email or password" (or similar) appears below the form.
 5.  **Status:** [ ] Pass / [ ] Fail
+
+---
+
+## Epic 1.5: Role-Based Access & Navigation
+
+### Test 1.5.1: First Registered User is Admin & Admin Navigation
+*Prerequisite: Ensure your Firestore emulator data for 'users' collection is empty. You can do this via `http://127.0.0.1:4000/firestore` by deleting the 'users' collection, or by restarting the emulator with fresh data.*
+1.  Navigate to `http://localhost:5173/register`.
+2.  Register a new user (e.g., Email: `admin@example.com`, Username: `adminuser`, Password: `AdminP@ss1`).
+3.  **Expected Result:**
+    *   You are automatically logged in and redirected to the `/dashboard` page.
+    *   The navigation bar displays: "Logged in as: adminuser", "Logout", "Home", "Dashboard", "Leaderboard", and an "**Admin**" link.
+4.  **Verify Admin Role in Firestore:**
+    *   Go to `http://127.0.0.1:4000/firestore`.
+    *   Find the `users` collection and the `adminuser` document.
+    *   **Expected:** The document should contain a field `role: "admin"`.
+5.  **Status:** [ ] Pass / [ ] Fail
+
+### Test 1.5.2: Subsequent Registered User is Regular User & User Navigation
+*Prerequisite: Complete Test 1.5.1 so an admin user exists.*
+1.  If logged in as `adminuser`, click the "Logout" button.
+2.  Navigate to `http://localhost:5173/register`.
+3.  Register another new user (e.g., Email: `regular@example.com`, Username: `regularuser`, Password: `RegularP@ss1`).
+4.  **Expected Result:**
+    *   You are automatically logged in and redirected to the `/dashboard` page.
+    *   The navigation bar displays: "Logged in as: regularuser", "Logout", "Home", "Dashboard", "Leaderboard". The "**Admin**" link should **NOT** be visible.
+5.  **Verify User Role in Firestore:**
+    *   Go to `http://127.0.0.1:4000/firestore`.
+    *   Find the `users` collection and the `regularuser` document.
+    *   **Expected:** The document should contain a field `role: "user"`.
+6.  **Status:** [ ] Pass / [ ] Fail
+
+### Test 1.5.3: Guest Navigation
+*Prerequisite: Logged out from any user.*
+1.  If logged in, click the "Logout" button.
+2.  Navigate to `http://localhost:5173/` (Home page).
+3.  **Expected Result:**
+    *   The navigation bar displays: "Home", "Login", "Register".
+    *   "Dashboard", "Leaderboard", "Admin", "Logged in as...", and "Logout" links should **NOT** be visible.
+4.  **Status:** [ ] Pass / [ ] Fail
 
 ---
 

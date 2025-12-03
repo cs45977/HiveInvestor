@@ -1,6 +1,33 @@
-venv/
-host_venv/
+# Python
 __pycache__/
-*.pyc
-.DS_Store
+*.py[cod]
+*$py.class
+.venv/
+host_venv/
+.pytest_cache/
 .env
+
+# Vue/Node
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.*.local
+
+# Vagrant
+.vagrant/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Firebase
+backend/firebase-debug.log
+backend/firestore-debug.log
+backend/ui-debug.log
+backend/firebase-data/
