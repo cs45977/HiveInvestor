@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { login } from '../../services/auth'
+// import { useRouter } from 'vue-router' // No longer needed as auth store handles navigation
+// import { login } from '../../services/auth' // No longer needed as auth store encapsulates service call
+import { useAuthStore } from '../../stores/auth'
 
-const router = useRouter()
+// const router = useRouter() // No longer needed
+const auth = useAuthStore()
+
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
@@ -11,9 +14,8 @@ const errorMessage = ref('')
 const handleSubmit = async () => {
   errorMessage.value = ''
   try {
-    await login(email.value, password.value)
-    // Store token logic would happen here or in the service
-    router.push('/')
+    await auth.login(email.value, password.value) // Use store's login method
+    // Navigation is handled by the auth store after successful login
   } catch (error) {
      if (error.response && error.response.data && error.response.data.detail) {
         errorMessage.value = error.response.data.detail

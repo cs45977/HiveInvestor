@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api.v1.endpoints import users, auth, portfolios, market, trade, transactions, leaderboard
+from app.api.v1.endpoints import users, auth, portfolios, market, trade, transactions, leaderboard, admin
 
 app = FastAPI()
 
@@ -10,6 +10,7 @@ app.include_router(market.router, prefix="/api/v1/market", tags=["market"])
 app.include_router(trade.router, prefix="/api/v1/trade", tags=["trade"])
 app.include_router(transactions.router, prefix="/api/v1/transactions", tags=["transactions"])
 app.include_router(leaderboard.router, prefix="/api/v1/leaderboard", tags=["leaderboard"])
+app.include_router(admin.router, prefix="/api/v1/admin", tags=["admin"])
 
 @app.get("/")
 def read_root():

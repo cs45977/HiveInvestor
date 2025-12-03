@@ -151,9 +151,15 @@ async def generate_leaderboards(db):
             today_snap = today_snap_ref.get()
             start_snap = start_snap_ref.get()
             
-            if today_snap.exists and start_snap.exists:
+            if today_snap.exists:
                 current_value = today_snap.to_dict().get("total_value", 0.0)
-                start_value = start_snap.to_dict().get("total_value", 0.0)
+                
+                # Fallback: If start snapshot doesn't exist (new user), use current value as start
+                # This results in 0% PPG, allowing them to appear on the leaderboard.
+                if start_snap.exists:
+                    start_value = start_snap.to_dict().get("total_value", 0.0)
+                else:
+                    start_value = current_value
                 
                 ppg = calculate_ppg(current_value, start_value)
                 

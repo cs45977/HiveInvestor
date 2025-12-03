@@ -1,9 +1,12 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { register } from '../../services/auth'
+// import { useRouter } from 'vue-router' // No longer needed
+// import { register } from '../../services/auth' // No longer needed
+import { useAuthStore } from '../../stores/auth'
 
-const router = useRouter()
+// const router = useRouter() // No longer needed
+const auth = useAuthStore()
+
 const email = ref('')
 const username = ref('')
 const password = ref('')
@@ -52,10 +55,9 @@ const handleSubmit = async () => {
   successMessage.value = ''
   if (isFormValid.value) {
     try {
-      await register(email.value, username.value, password.value)
+      await auth.registerAndLogin(email.value, username.value, password.value) // Use store's registerAndLogin method
       successMessage.value = 'Registration successful!'
-      // Optionally delay redirect to show success message
-      router.push('/')
+      // Navigation is handled by the auth store after successful registration and login
     } catch (error) {
       if (error.response && error.response.data && error.response.data.detail) {
         errorMessage.value = error.response.data.detail

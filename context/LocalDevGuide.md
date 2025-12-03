@@ -143,8 +143,16 @@ xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
 
 1.  SSH into your VM: `vagrant ssh`
 2.  Navigate to your backend project directory: `cd /vagrant/backend`
-3.  Activate your Python virtual environment: `source venv/bin/activate`
-4.  Run the FastAPI application:
+3.  **Configure Environment Variables:**
+    *   Create a `.env` file in the `backend/` directory (this file is git-ignored).
+    *   Add the following variables:
+        ```bash
+        FINNHUB_API_KEY="your_actual_finnhub_key" # Defaults to "mock-key" if omitted
+        SECRET_KEY="your-secret-key-keep-it-secret"
+        ```
+    *   If you don't set `FINNHUB_API_KEY`, the app will use mock data.
+4.  Activate your Python virtual environment: `source venv/bin/activate`
+5.  Run the FastAPI application:
     ```bash
     uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     ```

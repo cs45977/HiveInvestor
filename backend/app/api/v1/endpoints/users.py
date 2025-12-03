@@ -18,6 +18,10 @@ def register_user(user: UserCreate, db=Depends(get_db)):
     if existing_users:
         raise HTTPException(status_code=400, detail="Email already registered")
 
+    # Determine role: first user is admin, subsequent users are regular users
+    is_first_user = len(list(users_ref.limit(1).stream())) == 0
+    assigned_role = "admin" if is_first_user else "user"
+
     user_id = str(uuid.uuid4())
     
     hashed_password = security.get_password_hash(user.password)
@@ -26,11 +30,13 @@ def register_user(user: UserCreate, db=Depends(get_db)):
         "id": user_id,
         "email": user.email,
         "username": user.username,
-        "hashed_password": hashed_password
+        "hashed_password": hashed_password,
+        "role": assigned_role # Assign the determined role
     }
     
     users_ref.document(user_id).set(user_doc)
     
+    # Return user_doc with the assigned role
     return user_doc
 
 @router.get("/me", response_model=UserResponse)
