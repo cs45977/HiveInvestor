@@ -11,6 +11,6 @@ app.use(router)
 
 // Initialize auth store and check auth state
 const auth = useAuthStore();
-auth.checkAuth(); 
-
-app.mount('#app')
+auth.checkAuth().finally(() => {
+  app.mount('#app')
+});
