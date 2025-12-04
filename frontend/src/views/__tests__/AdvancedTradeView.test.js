@@ -50,4 +50,21 @@ describe('AdvancedTradeView', () => {
     // Expect modal to appear (assuming we add a class .confirmation-modal)
     expect(wrapper.find('.confirmation-modal').exists()).toBe(true)
   })
+
+  it('updates symbol and fetches data on search', async () => {
+    const wrapper = mount(AdvancedTradeView, {
+      global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })]
+      }
+    })
+
+    const searchInput = wrapper.find('input.symbol-search')
+    expect(searchInput.exists()).toBe(true)
+
+    await searchInput.setValue('GOOGL')
+    await searchInput.trigger('keyup.enter') // Or click button
+
+    // Verify QuoteHeader prop updated
+    expect(wrapper.findComponent({ name: 'QuoteHeader' }).props('symbol')).toBe('GOOGL')
+  })
 })

@@ -2,8 +2,22 @@
   <div class="container mx-auto p-4 h-screen flex flex-col md:flex-row gap-4">
     <!-- Left Panel: Research -->
     <div class="w-full md:w-2/3 flex flex-col">
+      <!-- Symbol Search -->
+      <div class="flex mb-4">
+        <input 
+          type="text" 
+          v-model="searchQuery" 
+          @keyup.enter="searchSymbol"
+          placeholder="Enter symbol (e.g., AAPL)" 
+          class="symbol-search flex-grow p-2 border rounded-l uppercase"
+        />
+        <button @click="searchSymbol" class="bg-blue-600 text-white px-4 py-2 rounded-r hover:bg-blue-700 font-bold">
+          Search
+        </button>
+      </div>
+
       <QuoteHeader 
-        symbol="AAPL" 
+        :symbol="activeSymbol" 
         :price="150.00" 
         :change="1.50" 
         :percentChange="1.01"
@@ -17,7 +31,7 @@
 
     <!-- Right Panel: Order Entry -->
     <div class="w-full md:w-1/3">
-      <EnhancedTradeForm @submit-order="handleOrderSubmit" />
+      <EnhancedTradeForm :symbol="activeSymbol" @submit-order="handleOrderSubmit" />
     </div>
 
     <!-- Confirmation Modal -->
@@ -27,7 +41,7 @@
         <p>Are you sure you want to place this order?</p>
         <div class="my-4 p-4 bg-gray-100 rounded">
           <p><strong>Action:</strong> {{ pendingOrder.type }}</p>
-          <p><strong>Symbol:</strong> AAPL</p>
+          <p><strong>Symbol:</strong> {{ activeSymbol }}</p>
           <p><strong>Quantity:</strong> {{ pendingOrder.quantity }}</p>
           <p><strong>Type:</strong> {{ pendingOrder.order_type }}</p>
           <p v-if="pendingOrder.limit_price"><strong>Limit Price:</strong> ${{ pendingOrder.limit_price }}</p>
@@ -49,12 +63,23 @@ import TradingChart from '../components/trade/TradingChart.vue';
 import EnhancedTradeForm from '../components/trade/EnhancedTradeForm.vue';
 import axios from 'axios';
 
+const activeSymbol = ref('AAPL');
+const searchQuery = ref('');
+
 // Dummy data for MVP
 const chartData = ref([
   { time: '2023-01-01', open: 145, high: 150, low: 144, close: 148 },
   { time: '2023-01-02', open: 148, high: 152, low: 147, close: 150 },
   { time: '2023-01-03', open: 150, high: 155, low: 149, close: 153 },
 ]);
+
+const searchSymbol = () => {
+  if (searchQuery.value) {
+    activeSymbol.value = searchQuery.value.toUpperCase();
+    // In real app: fetchQuote(activeSymbol.value)
+    // In real app: fetchChart(activeSymbol.value)
+  }
+};
 
 const showModal = ref(false);
 const pendingOrder = ref({});
@@ -67,7 +92,7 @@ const handleOrderSubmit = (order) => {
 const confirmOrder = async () => {
   try {
     await axios.post('/api/v1/trade/', {
-        symbol: "AAPL", // Hardcoded for this view MVP
+        symbol: activeSymbol.value, 
         ...pendingOrder.value
     });
     alert('Order Placed Successfully');
