@@ -36,6 +36,17 @@ export const getHistory = async (symbol, resolution, limit) => {
     return response.data
 }
 
+export const cancelTransaction = async (transactionId) => {
+    const token = localStorage.getItem('token')
+    const response = await axios.post(`${API_URL}/transactions/${transactionId}/cancel`, {}, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    return response.data
+}
+
+
 
 
 
