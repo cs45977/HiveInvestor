@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white p-6 rounded-lg shadow enhanced-trade-form">
-    <h3 class="text-xl font-bold mb-4">Order Entry</h3>
+    <h3 class="text-xl font-bold mb-4">Order Entry: {{ symbol }}</h3>
     
     <!-- Action Toggle -->
     <div class="flex mb-4">
@@ -59,6 +59,10 @@
 
 <script setup>
 import { reactive } from 'vue';
+
+const props = defineProps({
+  symbol: { type: String, default: '' }
+});
 
 const emit = defineEmits(['submit-order']);
 

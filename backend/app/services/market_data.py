@@ -73,6 +73,20 @@ async def get_real_time_quote(symbol: str) -> StockQuote:
         # Handle common typo APPL -> AAPL
         lookup_symbol = "AAPL" if symbol.upper() == "APPL" else symbol.upper()
         
+        company_names = {
+            "AAPL": "Apple Inc.",
+            "GOOG": "Alphabet Inc.",
+            "MSFT": "Microsoft Corp.",
+            "AMZN": "Amazon.com Inc.",
+            "TSLA": "Tesla Inc.",
+            "NFLX": "Netflix Inc.",
+            "NVDA": "NVIDIA Corp.",
+            "META": "Meta Platforms Inc.",
+            "ES": "S&P 500 Futures",
+            "NQ": "Nasdaq 100 Futures",
+            "YM": "Dow Jones Futures"
+        }
+        
         if lookup_symbol in ["AAPL", "GOOG", "MSFT", "AMZN", "TSLA", "NFLX", "NVDA", "META"]: # Example recognized symbols
             base_price = sum(ord(c) for c in lookup_symbol) % 100 + 100 # Simple way to get a somewhat unique base price
             price = round(base_price + (random.random() - 0.5) * 10, 2) # +/- 5 change
@@ -81,6 +95,7 @@ async def get_real_time_quote(symbol: str) -> StockQuote:
             
             return StockQuote(
                 symbol=lookup_symbol,
+                company_name=company_names.get(lookup_symbol, lookup_symbol),
                 price=price,
                 change=change,
                 percent_change=percent_change

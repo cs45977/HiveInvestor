@@ -2,7 +2,10 @@
   <div class="bg-gray-800 text-white p-4 rounded-lg shadow mb-4 quote-header">
     <div class="flex justify-between items-center">
       <div>
-        <h2 class="text-3xl font-bold !text-white text-left mb-0">{{ symbol }}</h2>
+        <div class="flex items-baseline gap-2">
+           <h2 class="text-3xl font-bold !text-white text-left mb-0">{{ symbol }}</h2>
+           <span class="text-gray-400 text-lg">{{ companyName }}</span>
+        </div>
         <div class="text-4xl font-bold" :class="changeClass">
           ${{ price.toFixed(2) }}
         </div>
@@ -25,6 +28,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
   symbol: { type: String, required: true },
+  companyName: { type: String, default: '' },
   price: { type: Number, required: true },
   change: { type: Number, default: 0 },
   percentChange: { type: Number, default: 0 },

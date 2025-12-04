@@ -1,8 +1,9 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class StockQuote(BaseModel):
     symbol: str
+    company_name: Optional[str] = None
     price: float
     change: float
     percent_change: float
