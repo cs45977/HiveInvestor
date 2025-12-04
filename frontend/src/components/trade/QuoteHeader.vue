@@ -2,7 +2,7 @@
   <div class="bg-gray-800 text-white p-4 rounded-lg shadow mb-4 quote-header">
     <div class="flex justify-between items-center">
       <div>
-        <h2 class="text-3xl font-bold">{{ symbol }}</h2>
+        <h2 class="text-3xl font-bold text-white text-left mb-0">{{ symbol }}</h2>
         <div class="text-4xl font-bold" :class="changeClass">
           ${{ price.toFixed(2) }}
         </div>
