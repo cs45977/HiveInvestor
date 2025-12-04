@@ -5,7 +5,7 @@ import HoldingsTable from '../components/portfolio/HoldingsTable.vue'
 import TradeForm from '../components/trade/TradeForm.vue'
 import TransactionHistory from '../components/portfolio/TransactionHistory.vue'
 import StockWatchlist from '../components/market/StockWatchlist.vue'
-import { getPortfolio, getTransactions, getQuote } from '../services/portfolio'
+import { getPortfolio, getTransactions, getQuote, cancelTransaction } from '../services/portfolio'
 
 const portfolio = ref(null)
 const transactions = ref([])
@@ -44,6 +44,16 @@ const fetchData = async () => {
   }
 }
 
+const handleCancelTransaction = async (txId) => {
+  if (!confirm('Are you sure you want to cancel this order?')) return;
+  try {
+    await cancelTransaction(txId);
+    await fetchData(); // Refresh data
+  } catch (err) {
+    alert('Failed to cancel transaction: ' + (err.response?.data?.detail || err.message));
+  }
+};
+
 onMounted(fetchData)
 </script>
 
@@ -67,7 +77,10 @@ onMounted(fetchData)
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <div class="md:col-span-2">
              <HoldingsTable :holdings="portfolio.holdings" />
-             <TransactionHistory :transactions="transactions" />
+             <TransactionHistory 
+                :transactions="transactions" 
+                @cancel-transaction="handleCancelTransaction"
+             />
           </div>
           <div>
              <TradeForm @trade-executed="fetchData" />

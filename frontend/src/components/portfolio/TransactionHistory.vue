@@ -43,11 +43,14 @@ const formatCurrency = (value) => {
            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
             Total
           </th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            Action
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-if="transactions.length === 0">
-            <td colspan="7" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+            <td colspan="8" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                 No transactions
             </td>
         </tr>
@@ -59,7 +62,7 @@ const formatCurrency = (value) => {
             {{ tx.type }}
           </td>
           <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-            <span :class="{'bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-xs': tx.status === 'PENDING', 'bg-green-200 text-green-800 px-2 py-1 rounded text-xs': tx.status === 'EXECUTED'}">
+            <span :class="{'bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-xs': tx.status === 'PENDING', 'bg-green-200 text-green-800 px-2 py-1 rounded text-xs': tx.status === 'EXECUTED', 'bg-red-200 text-red-800 px-2 py-1 rounded text-xs': tx.status === 'CANCELLED'}">
               {{ tx.status || 'EXECUTED' }}
             </span>
           </td>
@@ -74,6 +77,15 @@ const formatCurrency = (value) => {
           </td>
            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
             {{ tx.total_amount ? formatCurrency(tx.total_amount) : '-' }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+            <button 
+                v-if="tx.status === 'PENDING'" 
+                @click="$emit('cancel-transaction', tx.id)"
+                class="text-red-600 hover:text-red-900 font-bold text-xs"
+            >
+                Cancel
+            </button>
           </td>
         </tr>
       </tbody>
