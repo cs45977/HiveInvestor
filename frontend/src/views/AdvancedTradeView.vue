@@ -18,6 +18,7 @@
 
       <QuoteHeader 
         :symbol="activeSymbol" 
+        :companyName="quoteData.companyName"
         :price="quoteData.price" 
         :change="quoteData.change" 
         :percentChange="quoteData.percentChange"
@@ -49,12 +50,14 @@
 
         <!-- Overlays -->
         <div class="flex gap-4 border-l border-gray-600 pl-4 items-center">
-            <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" v-model="overlayIndex" />
-                Index Futures (ES)
-            </label>
+            <div class="flex gap-2">
+                <label v-for="idx in availableIndices" :key="idx.value" class="flex items-center gap-1 cursor-pointer">
+                    <input type="checkbox" :value="idx.value" v-model="activeOverlays" />
+                    {{ idx.label }}
+                </label>
+            </div>
             
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 border-l border-gray-600 pl-4">
                 <input 
                     v-if="!overlaySymbol"
                     type="text" 
@@ -80,7 +83,7 @@
     </div>
 
     <!-- Confirmation Modal -->
-    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center confirmation-modal">
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center confirmation-modal z-50">
       <div class="bg-white p-6 rounded shadow-lg max-w-md w-full">
         <h3 class="text-xl font-bold mb-4">Confirm Order</h3>
         <p>Are you sure you want to place this order?</p>
@@ -111,6 +114,7 @@ import { getQuote, executeTrade, getHistory } from '../services/portfolio';
 const activeSymbol = ref('AAPL');
 const searchQuery = ref('');
 const quoteData = reactive({
+  companyName: '',
   price: 0,
   change: 0,
   percentChange: 0,
@@ -124,7 +128,7 @@ const quoteData = reactive({
 const seriesList = ref([]);
 const chartType = ref('Candlestick'); // 'Candlestick' or 'Line'
 const timeframe = ref('1Y'); // Default
-const overlayIndex = ref(false); // ES Future
+const activeOverlays = ref([]); // Array of strings: 'ES', 'NQ', 'YM'
 const overlaySymbol = ref(''); 
 const overlaySymbolInput = ref('');
 
@@ -135,6 +139,12 @@ const timeframes = [
   { label: '3M', resolution: 'D', limit: 90 },
   { label: '1Y', resolution: 'D', limit: 252 },
   { label: '5Y', resolution: 'D', limit: 1260 },
+];
+
+const availableIndices = [
+  { label: 'ES (S&P 500)', value: 'ES' },
+  { label: 'NQ (Nasdaq)', value: 'NQ' },
+  { label: 'YM (Dow)', value: 'YM' }
 ];
 
 const fetchChartData = async () => {
@@ -159,14 +169,16 @@ const fetchChartData = async () => {
       });
     }
     
-    // Overlays
-    if (overlayIndex.value) {
-      const esHistory = await getHistory('ES', tf.resolution, tf.limit);
-      newSeries.push({
-        type: 'Line',
-        data: esHistory.candles.map(c => ({ time: c.time, value: c.close })),
-        options: { color: '#FFA726', lineWidth: 2, priceScaleId: 'left' }
-      });
+    // Index Overlays
+    const indexColors = { 'ES': '#FFA726', 'NQ': '#00BCD4', 'YM': '#E91E63' };
+    
+    for (const idx of activeOverlays.value) {
+        const hist = await getHistory(idx, tf.resolution, tf.limit);
+        newSeries.push({
+            type: 'Line',
+            data: hist.candles.map(c => ({ time: c.time, value: c.close })),
+            options: { color: indexColors[idx] || '#FFF', lineWidth: 2, priceScaleId: 'left', title: idx }
+        });
     }
     
     if (overlaySymbol.value) {
@@ -174,7 +186,7 @@ const fetchChartData = async () => {
       newSeries.push({
         type: 'Line',
         data: ovHistory.candles.map(c => ({ time: c.time, value: c.close })),
-        options: { color: '#AB47BC', lineWidth: 2, priceScaleId: 'left' } // Shared left axis for overlays for now
+        options: { color: '#AB47BC', lineWidth: 2, priceScaleId: 'left', title: overlaySymbol.value } 
       });
     }
     
@@ -188,6 +200,7 @@ const fetchChartData = async () => {
 const fetchQuote = async (symbol) => {
   try {
     const data = await getQuote(symbol);
+    quoteData.companyName = data.company_name || '';
     quoteData.price = data.price;
     quoteData.change = data.change;
     quoteData.percentChange = data.percent_change;
@@ -225,7 +238,7 @@ const removeOverlay = () => {
 };
 
 // Watchers for controls
-watch([timeframe, chartType, overlayIndex], fetchChartData);
+watch([timeframe, chartType, activeOverlays], fetchChartData, { deep: true });
 
 onMounted(() => {
   fetchQuote(activeSymbol.value);

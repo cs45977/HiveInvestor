@@ -7,7 +7,7 @@ import { getQuote, executeTrade } from '../../services/portfolio'
 
 // Mock portfolio service
 vi.mock('../../services/portfolio', () => ({
-  getQuote: vi.fn(() => Promise.resolve({ price: 150, change: 1.5, percent_change: 1.0 })),
+  getQuote: vi.fn(() => Promise.resolve({ company_name: 'Apple Inc.', price: 150, change: 1.5, percent_change: 1.0 })),
   getHistory: vi.fn(() => Promise.resolve({ symbol: 'AAPL', candles: [] })),
   executeTrade: vi.fn(() => Promise.resolve({}))
 }))
