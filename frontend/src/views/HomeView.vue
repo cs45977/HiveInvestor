@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import StockWatchlist from '../components/market/StockWatchlist.vue'
 
 const isDev = import.meta.env.DEV
 const backendStatus = ref('Checking connection...')
@@ -36,8 +37,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main>
-    <h1>Welcome to HiveInvestor</h1>
+  <main class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6">Welcome to HiveInvestor</h1>
+    
+    <StockWatchlist class="mb-8" />
+
     <div v-if="isDev" class="text-center mt-4 p-4 bg-gray-100 rounded shadow-sm inline-block">
       <p class="text-sm font-bold text-gray-500 mb-2 uppercase tracking-wide">Development Status</p>
       <div class="grid grid-cols-2 gap-4 text-left">

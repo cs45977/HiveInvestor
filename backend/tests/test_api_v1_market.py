@@ -51,3 +51,27 @@ def test_get_quote_endpoint_not_found():
         
         assert response.status_code == 404
         assert response.json()["detail"] == "Symbol INVALID not found"
+
+def test_get_quote_unauthenticated():
+    # Clear the dependency override to simulate no user
+    app.dependency_overrides = {}
+    
+    mock_quote = StockQuote(
+        symbol="AAPL",
+        price=150.0,
+        change=1.5,
+        percent_change=1.0
+    )
+    
+    with patch("app.api.v1.endpoints.market.get_real_time_quote", new_callable=AsyncMock) as mock_service:
+        mock_service.return_value = mock_quote
+        
+        # This should now pass with 200 if we make the endpoint public
+        # Currently it will fail with 401 because the endpoint enforces auth
+        response = client.get("/api/v1/market/quote/AAPL")
+        
+        assert response.status_code == 200
+        assert response.json()["symbol"] == "AAPL"
+    
+    # Restore override for other tests if needed (though pytest order matters)
+    app.dependency_overrides[get_current_user] = mock_get_current_user

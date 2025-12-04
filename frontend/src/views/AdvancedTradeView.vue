@@ -61,7 +61,7 @@ import { ref, reactive, onMounted } from 'vue';
 import QuoteHeader from '../components/trade/QuoteHeader.vue';
 import TradingChart from '../components/trade/TradingChart.vue';
 import EnhancedTradeForm from '../components/trade/EnhancedTradeForm.vue';
-import axios from 'axios';
+import { getQuote, executeTrade } from '../services/portfolio'; // Import service functions
 
 const activeSymbol = ref('AAPL');
 const searchQuery = ref('');
@@ -84,8 +84,7 @@ const chartData = ref([
 
 const fetchQuote = async (symbol) => {
   try {
-    const response = await axios.get(`/api/v1/market/quote/${symbol}`);
-    const data = response.data;
+    const data = await getQuote(symbol);
     quoteData.price = data.price;
     quoteData.change = data.change;
     quoteData.percentChange = data.percent_change;
@@ -121,7 +120,7 @@ const handleOrderSubmit = (order) => {
 
 const confirmOrder = async () => {
   try {
-    await axios.post('/api/v1/trade/', {
+    await executeTrade({
         symbol: activeSymbol.value, 
         ...pendingOrder.value
     });

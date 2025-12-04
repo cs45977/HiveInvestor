@@ -24,21 +24,9 @@ export const executeTrade = async (tradeRequest) => {
 }
 
 export const getQuote = async (symbol) => {
-
-    const token = localStorage.getItem('token')
-
-    const response = await axios.get(`${API_URL}/market/quote/${symbol}`, {
-
-        headers: {
-
-            'Authorization': `Bearer ${token}`
-
-        }
-
-    })
-
+    // Endpoint is public, no auth required
+    const response = await axios.get(`${API_URL}/market/quote/${symbol}`)
     return response.data
-
 }
 
 
