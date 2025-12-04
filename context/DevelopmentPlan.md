@@ -164,20 +164,20 @@ This development plan outlines the epics and stories for building the HiveInvest
         *   **Timeframes:** Intraday (1m, 5m, 1h) and Daily (30D to 5Y, All Time).
         *   **Chart Types:** Toggle between Candlestick and Line charts.
         *   **Overlays:** Ability to overlay major index futures (e.g., ES) and other stocks.
-    *   **Status:** In Progress
+    *   **Status:** Complete
 
-*   **Story 5.4: Limit Order Support (Backend)**
+*   **Story 5.5: Limit Order Support (Backend)**
     *   **Description:** Update `Trade` model and `POST /api/v1/trade` endpoint to accept `order_type` (MARKET, LIMIT) and `limit_price`. Implement validation logic for limit orders.
     *   **Status:** Complete
 
-*   **Story 5.5: Enhanced Order Entry Form (Frontend)**
+*   **Story 5.6: Enhanced Order Entry Form (Frontend)**
     *   **Description:** Upgrade the frontend trade form to support Buy/Sell toggle, Market/Limit selection, conditional limit price input, and dynamic quantity selectors (25%, 50%, 100%).
     *   **Status:** Complete
 
-*   **Story 5.6: Time in Force (TIF) Support**
+*   **Story 5.7: Time in Force (TIF) Support**
     *   **Description:** Add `time_in_force` (DAY, GTC) to backend trade model and frontend form. Implement expiration logic for DAY orders (scheduled job or check-on-access).
     *   **Status:** Complete (Data support & validation implemented. Expiration logic deferred as per MVP scope).
 
-*   **Story 5.7: Trade Confirmation Modal**
+*   **Story 5.8: Trade Confirmation Modal**
     *   **Description:** Implement a confirmation modal that summarizes the trade (Estimated Cost/Revenue) before final submission.
     *   **Status:** Complete

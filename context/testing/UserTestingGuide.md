@@ -161,3 +161,62 @@ Before testing, ensure the local development environment is running:
     *   If data exists (after triggering evaluation and having history), a table of users ranked by PPG appears.
     *   If no data, "No data available" message.
 4.  **Status:** [ ] Pass / [ ] Fail
+
+---
+
+## Epic 5: Advanced Research & Trading
+
+### Test 5.1: Advanced Trade View & Symbol Search
+1.  **Navigate to Trade Page:**
+    *   Click the "Trade" link in the navigation bar (or navigate to `/trade`).
+    *   **Expected Result:** A split-pane view loads with a Research Panel (Left) and Order Entry Panel (Right).
+2.  **Search Symbol:**
+    *   In the search bar, enter `GOOG`.
+    *   Click "Search" or press Enter.
+    *   **Expected Result:**
+        *   The **Quote Header** updates to show GOOG price data.
+        *   The **Chart** updates to show GOOG price history.
+        *   The **Order Entry Form** updates the symbol to GOOG.
+3.  **Status:** [ ] Pass / [ ] Fail
+
+### Test 5.2: Advanced Charting Controls
+*Prerequisite: On the Trade page with a symbol loaded.*
+1.  **Change Timeframe:**
+    *   Click "1D", "1M", "1Y".
+    *   **Expected Result:** The chart updates its data granularity and range.
+2.  **Change Chart Type:**
+    *   Click "Line".
+    *   **Expected Result:** The chart switches from Candlestick to a Line chart.
+    *   Click "Candle".
+    *   **Expected Result:** The chart switches back to Candlestick.
+3.  **Add Overlay:**
+    *   Check "Index Futures (ES)".
+    *   **Expected Result:** An orange line (ES) overlays the main chart.
+    *   Type `MSFT` in the "Compare..." input and press Enter.
+    *   **Expected Result:** A purple line (MSFT) overlays the main chart.
+4.  **Status:** [ ] Pass / [ ] Fail
+
+### Test 5.3: Limit Order Execution
+*Prerequisite: On the Trade page.*
+1.  **Setup Limit Buy:**
+    *   Select **Action:** BUY.
+    *   Select **Type:** LIMIT.
+    *   Enter **Quantity:** 10.
+    *   Enter **Limit Price:** A price significantly *lower* than the current market price (e.g., if Price is 150, enter 100).
+    *   Select **TIF:** GTC.
+    *   Click **Review Order**.
+2.  **Confirmation Modal:**
+    *   **Expected Result:** A modal appears summarizing: BUY 10 @ $100 Limit (GTC).
+    *   Click **Confirm**.
+3.  **Verify Pending Order:**
+    *   **Expected Result:** Success message "Order Placed Successfully".
+    *   Navigate to **Dashboard**.
+    *   Check "Transaction History". The order might not execute immediately if the limit price wasn't met (in a real system). *Note: In the current mock/MVP, the backend might execute it immediately or create a transaction depending on logic. If it's a passive limit order, it might just sit in a database, but the current MVP transaction history usually records executed trades. Verify if PENDING orders are visible.* (Currently, the MVP executes or rejects; PENDING state logic is partial).
+4.  **Status:** [ ] Pass / [ ] Fail
+
+### Test 5.4: Market Overview (Watchlist)
+1.  **Navigate to Dashboard or Home:**
+    *   **Expected Result:** A "Market Overview" section is visible.
+    *   It displays quotes for "Mag 7" stocks (AAPL, MSFT, GOOG, etc.).
+    *   Prices and changes are color-coded (Green/Red).
+2.  **Status:** [ ] Pass / [ ] Fail
