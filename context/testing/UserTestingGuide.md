@@ -137,10 +137,30 @@ Before testing, ensure the local development environment is running:
         *   "Holdings" table updates AAPL Qty to 5.
         *   "Cash Balance" increases by (Price * 5 - Commission).
         *   "Transaction History" adds a SELL record.
-3.  **Insufficient Funds (Validation):**
+3.  **Verify Real-Time Valuation:**
+    *   Check the "Holdings" table.
+    *   **Expected Result:**
+        *   "Last Price" column shows the current market price (fetched live).
+        *   "Market Value" equals Quantity * Last Price.
+        *   "Total Portfolio Value" equals Cash + Sum of Market Values.
+4.  **Insufficient Funds (Validation):**
     *   Try to BUY a large quantity (e.g., 100000 AAPL) that exceeds cash.
     *   **Expected Result:** Error message "Insufficient funds" (or similar) appears.
-4.  **Status:** [ ] Pass / [ ] Fail
+5.  **Status:** [ ] Pass / [ ] Fail
+
+### Test 2.3: Transaction Cancellation
+*Prerequisite: Create a PENDING order (see Test 5.3 Limit Order).*
+1.  **Navigate to Dashboard.**
+2.  **Locate Pending Order:**
+    *   Find the transaction in "Transaction History" with status `PENDING`.
+3.  **Cancel Order:**
+    *   Click the **Cancel** button in the "Action" column.
+    *   Confirm the dialog.
+4.  **Expected Result:**
+    *   Success message appears.
+    *   The transaction status updates to `CANCELLED` (or `EXECUTED` if it magically filled, but expected Cancelled).
+    *   The Cancel button disappears.
+5.  **Status:** [ ] Pass / [ ] Fail
 
 ---
 
@@ -174,9 +194,10 @@ Before testing, ensure the local development environment is running:
     *   In the search bar, enter `GOOG`.
     *   Click "Search" or press Enter.
     *   **Expected Result:**
-        *   The **Quote Header** updates to show GOOG price data.
+        *   The **Quote Header** updates to show GOOG price data and **Company Name**.
         *   The **Chart** updates to show GOOG price history.
         *   The **Order Entry Form** updates the symbol to GOOG.
+        *   *If you own GOOG:* The Order Entry Form displays "You own: X shares @ Avg. $Y".
 3.  **Status:** [ ] Pass / [ ] Fail
 
 ### Test 5.2: Advanced Charting Controls

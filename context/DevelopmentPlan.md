@@ -101,6 +101,10 @@ This development plan outlines the epics and stories for building the HiveInvest
     *   **Description:** Implement API endpoints and frontend components to display a user's transaction history.
     *   **Status:** Complete
 
+*   **Story 2.7: Transaction Cancellation**
+    *   **Description:** Enable users to cancel orders that are in a 'PENDING' state (e.g., unexecuted Limit orders).
+    *   **Status:** Complete
+
 ## Epic 3: Rolling Performance Evaluation and Leaderboards
 **Objective:** Implement the core logic for continuous portfolio evaluation and display rolling leaderboards.
 
@@ -180,4 +184,8 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 5.8: Trade Confirmation Modal**
     *   **Description:** Implement a confirmation modal that summarizes the trade (Estimated Cost/Revenue) before final submission.
+    *   **Status:** Complete
+
+*   **Story 5.9: Market Overview Watchlist**
+    *   **Description:** Add a configurable 'Market Overview' component to the Dashboard and Home page, displaying real-time quotes for key stocks (e.g., Mag 7). Ensure unauthenticated access on Home page.
     *   **Status:** Complete
