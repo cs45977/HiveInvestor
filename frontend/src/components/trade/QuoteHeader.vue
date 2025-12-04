@@ -4,7 +4,7 @@
       <div>
         <div class="flex items-baseline gap-2">
            <h2 class="text-3xl font-bold !text-white text-left mb-0">{{ symbol }}</h2>
-           <span class="text-gray-400 text-lg">{{ companyName }}</span>
+           <span class="text-gray-200 text-lg font-medium">{{ companyName }}</span>
         </div>
         <div class="text-4xl font-bold" :class="changeClass">
           ${{ price.toFixed(2) }}
