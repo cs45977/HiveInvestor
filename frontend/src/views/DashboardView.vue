@@ -4,6 +4,7 @@ import PortfolioSummary from '../components/portfolio/PortfolioSummary.vue'
 import HoldingsTable from '../components/portfolio/HoldingsTable.vue'
 import TradeForm from '../components/trade/TradeForm.vue'
 import TransactionHistory from '../components/portfolio/TransactionHistory.vue'
+import StockWatchlist from '../components/market/StockWatchlist.vue'
 import { getPortfolio, getTransactions } from '../services/portfolio'
 
 const portfolio = ref(null)
@@ -29,7 +30,11 @@ onMounted(fetchData)
 
 <template>
   <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">My Portfolio</h1>
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold">My Portfolio</h1>
+    </div>
+    
+    <StockWatchlist class="mb-6" />
     
     <div v-if="loading" class="text-center">Loading...</div>
     <div v-else-if="error" class="text-red-500">{{ error }}</div>

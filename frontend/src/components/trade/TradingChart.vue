@@ -4,7 +4,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
-import { createChart } from 'lightweight-charts';
+import { createChart, CandlestickSeries } from 'lightweight-charts';
 
 const props = defineProps({
   data: { type: Array, required: true } // Array of { time, open, high, low, close }
@@ -22,7 +22,7 @@ onMounted(() => {
       layout: { backgroundColor: '#111827', textColor: '#D1D5DB' },
       grid: { vertLines: { color: '#374151' }, horzLines: { color: '#374151' } },
     });
-    candlestickSeries = chart.addCandlestickSeries();
+    candlestickSeries = chart.addSeries(CandlestickSeries);
     candlestickSeries.setData(props.data);
   }
   

@@ -7,8 +7,7 @@ router = APIRouter()
 
 @router.get("/quote/{symbol}", response_model=StockQuote)
 async def get_quote(
-    symbol: str,
-    current_user: dict = Depends(deps.get_current_user)
+    symbol: str
 ):
     quote = await get_real_time_quote(symbol)
     return quote
