@@ -18,13 +18,13 @@
 
       <QuoteHeader 
         :symbol="activeSymbol" 
-        :price="150.00" 
-        :change="1.50" 
-        :percentChange="1.01"
-        :open="148.50"
-        :high="151.00"
-        :low="148.00"
-        :volume="50000000"
+        :price="quoteData.price" 
+        :change="quoteData.change" 
+        :percentChange="quoteData.percentChange"
+        :open="quoteData.open"
+        :high="quoteData.high"
+        :low="quoteData.low"
+        :volume="quoteData.volume"
       />
       <TradingChart :data="chartData" />
     </div>
@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import QuoteHeader from '../components/trade/QuoteHeader.vue';
 import TradingChart from '../components/trade/TradingChart.vue';
 import EnhancedTradeForm from '../components/trade/EnhancedTradeForm.vue';
@@ -65,21 +65,51 @@ import axios from 'axios';
 
 const activeSymbol = ref('AAPL');
 const searchQuery = ref('');
+const quoteData = reactive({
+  price: 0,
+  change: 0,
+  percentChange: 0,
+  open: 0,
+  high: 0,
+  low: 0,
+  volume: 0
+});
 
-// Dummy data for MVP
+// Dummy data for MVP (Chart data remains dummy as no backend endpoint for history yet)
 const chartData = ref([
   { time: '2023-01-01', open: 145, high: 150, low: 144, close: 148 },
   { time: '2023-01-02', open: 148, high: 152, low: 147, close: 150 },
   { time: '2023-01-03', open: 150, high: 155, low: 149, close: 153 },
 ]);
 
+const fetchQuote = async (symbol) => {
+  try {
+    const response = await axios.get(`/api/v1/market/quote/${symbol}`);
+    const data = response.data;
+    quoteData.price = data.price;
+    quoteData.change = data.change;
+    quoteData.percentChange = data.percent_change;
+    // Mock extra fields if not in API response
+    quoteData.open = data.price - data.change; 
+    quoteData.high = data.price + 1.0;
+    quoteData.low = data.price - 1.0;
+    quoteData.volume = 1000000;
+  } catch (error) {
+    console.error('Failed to fetch quote:', error);
+    // Reset or show error state
+  }
+};
+
 const searchSymbol = () => {
   if (searchQuery.value) {
     activeSymbol.value = searchQuery.value.toUpperCase();
-    // In real app: fetchQuote(activeSymbol.value)
-    // In real app: fetchChart(activeSymbol.value)
+    fetchQuote(activeSymbol.value);
   }
 };
+
+onMounted(() => {
+  fetchQuote(activeSymbol.value);
+});
 
 const showModal = ref(false);
 const pendingOrder = ref({});

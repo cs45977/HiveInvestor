@@ -154,7 +154,7 @@ This development plan outlines the epics and stories for building the HiveInvest
 
 *   **Story 5.2: Enhanced Quote Header**
     *   **Description:** Implement a component to display real-time quote data including LTP, Change, % Change, Day's High/Low, 52w High/Low, Volume, and Open. Connect to market data service.
-    *   **Status:** Complete
+    *   **Status:** Complete (Includes Symbol Search integration)
 
 *   **Story 5.3: Interactive Charting Component**
     *   **Description:** Integrate a charting library (e.g., Lightweight Charts) to display interactive candlestick/line charts with timeframe selection (1D-MAX) and basic technical indicators.

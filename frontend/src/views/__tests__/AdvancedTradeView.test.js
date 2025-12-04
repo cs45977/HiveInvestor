@@ -3,6 +3,15 @@ import { mount } from '@vue/test-utils'
 import AdvancedTradeView from '../AdvancedTradeView.vue'
 import { createTestingPinia } from '@pinia/testing'
 import EnhancedTradeForm from '../../components/trade/EnhancedTradeForm.vue'
+import axios from 'axios'
+
+// Mock axios
+vi.mock('axios', () => ({
+  default: {
+    post: vi.fn(),
+    get: vi.fn(() => Promise.resolve({ data: { price: 150, change: 1.5, percent_change: 1.0 } }))
+  }
+}))
 
 // Mock lightweight-charts
 vi.mock('lightweight-charts', () => ({
