@@ -77,10 +77,21 @@
       <TradingChart :seriesList="seriesList" />
     </div>
 
-    <!-- Right Panel: Order Entry -->
-    <div class="w-full md:w-1/3">
-      <EnhancedTradeForm :symbol="activeSymbol" @submit-order="handleOrderSubmit" />
-    </div>
+        <!-- Right Panel: Order Entry -->
+
+        <div class="w-full md:w-1/3">
+
+          <EnhancedTradeForm 
+
+            :symbol="activeSymbol" 
+
+            :currentHolding="currentHolding"
+
+            @submit-order="handleOrderSubmit" 
+
+          />
+
+        </div>
 
     <!-- Confirmation Modal -->
     <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center confirmation-modal z-50">
@@ -109,7 +120,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import QuoteHeader from '../components/trade/QuoteHeader.vue';
 import TradingChart from '../components/trade/TradingChart.vue';
 import EnhancedTradeForm from '../components/trade/EnhancedTradeForm.vue';
-import { getQuote, executeTrade, getHistory } from '../services/portfolio';
+import { getQuote, executeTrade, getHistory, getPortfolio } from '../services/portfolio';
 
 const activeSymbol = ref('AAPL');
 const searchQuery = ref('');
@@ -123,6 +134,22 @@ const quoteData = reactive({
   low: 0,
   volume: 0
 });
+
+const currentHolding = ref(null); // New reactive variable
+
+const fetchPortfolioHolding = async () => {
+  try {
+    const portfolio = await getPortfolio();
+    currentHolding.value = portfolio.holdings.find(h => h.symbol === activeSymbol.value) || {
+      symbol: activeSymbol.value,
+      quantity: 0,
+      average_price: 0
+    };
+  } catch (error) {
+    console.error('Failed to fetch portfolio:', error);
+    currentHolding.value = { symbol: activeSymbol.value, quantity: 0, average_price: 0 };
+  }
+};
 
 // Charting State
 const seriesList = ref([]);
@@ -210,6 +237,7 @@ const fetchQuote = async (symbol) => {
     quoteData.volume = 1000000;
     
     await fetchChartData();
+    await fetchPortfolioHolding();
 
   } catch (error) {
     console.error('Failed to fetch quote:', error);
@@ -239,6 +267,7 @@ const removeOverlay = () => {
 
 // Watchers for controls
 watch([timeframe, chartType, activeOverlays], fetchChartData, { deep: true });
+watch(activeSymbol, fetchPortfolioHolding); // Watch activeSymbol to update holdings
 
 onMounted(() => {
   fetchQuote(activeSymbol.value);

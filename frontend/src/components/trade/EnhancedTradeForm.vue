@@ -2,6 +2,12 @@
   <div class="bg-white p-6 rounded-lg shadow enhanced-trade-form">
     <h3 class="text-xl font-bold mb-4">Order Entry: {{ symbol }}</h3>
     
+    <div v-if="currentHolding && currentHolding.quantity > 0" class="mb-4 p-3 bg-blue-100 text-blue-800 rounded">
+      You own: 
+      <span class="font-bold">{{ currentHolding.quantity }} shares</span> 
+      @ Avg. <span class="font-bold">${{ currentHolding.average_price.toFixed(2) }}</span>
+    </div>
+
     <!-- Action Toggle -->
     <div class="flex mb-4">
       <button 
@@ -61,7 +67,8 @@
 import { reactive } from 'vue';
 
 const props = defineProps({
-  symbol: { type: String, default: '' }
+  symbol: { type: String, default: '' },
+  currentHolding: { type: Object, default: null } // { quantity, average_price }
 });
 
 const emit = defineEmits(['submit-order']);
