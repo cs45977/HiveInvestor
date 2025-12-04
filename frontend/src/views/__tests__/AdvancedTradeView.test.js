@@ -9,7 +9,14 @@ import { getQuote, executeTrade } from '../../services/portfolio'
 vi.mock('../../services/portfolio', () => ({
   getQuote: vi.fn(() => Promise.resolve({ company_name: 'Apple Inc.', price: 150, change: 1.5, percent_change: 1.0 })),
   getHistory: vi.fn(() => Promise.resolve({ symbol: 'AAPL', candles: [] })),
-  executeTrade: vi.fn(() => Promise.resolve({}))
+  executeTrade: vi.fn(() => Promise.resolve({})),
+  getPortfolio: vi.fn(() => Promise.resolve({
+    cash_balance: 100000,
+    total_value: 100000,
+    holdings: [
+      { symbol: 'AAPL', quantity: 10, average_price: 140.00 }
+    ]
+  }))
 }))
 
 // Mock lightweight-charts
@@ -77,5 +84,8 @@ describe('AdvancedTradeView', () => {
 
     // Verify QuoteHeader prop updated
     expect(wrapper.findComponent({ name: 'QuoteHeader' }).props('symbol')).toBe('GOOGL')
+    // Verify EnhancedTradeForm prop updated
+    expect(wrapper.findComponent({ name: 'EnhancedTradeForm' }).props('symbol')).toBe('GOOGL')
+    expect(wrapper.findComponent({ name: 'EnhancedTradeForm' }).props('currentHolding')).toEqual({ symbol: 'GOOGL', quantity: 0, average_price: 0 })
   })
 })
