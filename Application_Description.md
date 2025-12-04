@@ -38,6 +38,21 @@ This is the most critical difference and addresses the need for continuous compe
     3. **90-Day PPG Leaderboard:** Performance over the last 90 calendar days (Quarterly proxy).
 * **Logic:** The system continuously recalculates the PPG for all active users daily and updates the leaderboards. This allows a new player to immediately compete based on their first 7, 30, or 90 days, or for a veteran player to compete based on their most recent performance.
 
+### **3.3. Advanced Research & Trading Interface**
+
+A unified "Research and Order Entry" screen designed for high-speed analysis and execution.
+
+*   **Unified Layout:** A two-panel structure with a Research & Chart panel (Left/Top) and an Order Entry panel (Right/Bottom).
+*   **Real-Time Quote Header:** Displays essential data above the chart: Current Price (LTP), Change, % Change, Day's High/Low, 52-Week High/Low, Volume, and Open Price.
+*   **Interactive Charting:** Full-featured chart supporting Candlestick/Line modes, multiple timeframes (1D to MAX), zoom/pan, and technical indicators (Moving Averages, RSI, MACD).
+*   **Enhanced Order Entry:**
+    *   **Action:** Clear BUY/SELL toggle.
+    *   **Order Types:** Market and Limit orders.
+    *   **Quantity:** Numeric input with quick-select buttons (25%, 50%, 100% of capital/holdings).
+    *   **Conditional Fields:** Limit Price input (for Limit orders) and Time in Force (TIF) selection (Day, GTC).
+    *   **Pre-execution Summary:** Dynamic calculation of estimated cost or revenue.
+    *   **Confirmation:** A modal summary requiring user confirmation before order submission.
+
 ## **4\. Core Functional Requirements **
 
 | Feature | Description | Implementation Detail |
