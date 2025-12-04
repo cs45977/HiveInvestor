@@ -29,6 +29,9 @@ const formatCurrency = (value) => {
             Type
           </th>
           <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            Status
+          </th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
             Symbol
           </th>
           <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -44,7 +47,7 @@ const formatCurrency = (value) => {
       </thead>
       <tbody>
         <tr v-if="transactions.length === 0">
-            <td colspan="6" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+            <td colspan="7" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                 No transactions
             </td>
         </tr>
@@ -56,16 +59,21 @@ const formatCurrency = (value) => {
             {{ tx.type }}
           </td>
           <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            <span :class="{'bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-xs': tx.status === 'PENDING', 'bg-green-200 text-green-800 px-2 py-1 rounded text-xs': tx.status === 'EXECUTED'}">
+              {{ tx.status || 'EXECUTED' }}
+            </span>
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
             {{ tx.symbol }}
           </td>
           <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
             {{ tx.quantity }}
           </td>
            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-            {{ formatCurrency(tx.price_per_share) }}
+            {{ tx.price_per_share ? formatCurrency(tx.price_per_share) : (tx.limit_price ? '@ ' + formatCurrency(tx.limit_price) : '-') }}
           </td>
            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-            {{ formatCurrency(tx.total_amount) }}
+            {{ tx.total_amount ? formatCurrency(tx.total_amount) : '-' }}
           </td>
         </tr>
       </tbody>
