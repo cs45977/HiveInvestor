@@ -157,8 +157,14 @@ This development plan outlines the epics and stories for building the HiveInvest
     *   **Status:** Complete (Includes Symbol Search integration)
 
 *   **Story 5.3: Interactive Charting Component**
-    *   **Description:** Integrate a charting library (e.g., Lightweight Charts) to display interactive candlestick/line charts with timeframe selection (1D-MAX) and basic technical indicators.
     *   **Status:** Complete
+
+*   **Story 5.4: Advanced Charting**
+    *   **Description:** Implement advanced charting capabilities including:
+        *   **Timeframes:** Intraday (1m, 5m, 1h) and Daily (30D to 5Y, All Time).
+        *   **Chart Types:** Toggle between Candlestick and Line charts.
+        *   **Overlays:** Ability to overlay major index futures (e.g., ES) and other stocks.
+    *   **Status:** In Progress
 
 *   **Story 5.4: Limit Order Support (Backend)**
     *   **Description:** Update `Trade` model and `POST /api/v1/trade` endpoint to accept `order_type` (MARKET, LIMIT) and `limit_price`. Implement validation logic for limit orders.

@@ -26,7 +26,52 @@
         :low="quoteData.low"
         :volume="quoteData.volume"
       />
-      <TradingChart :data="chartData" />
+
+      <!-- Chart Controls -->
+      <div class="bg-gray-800 p-2 flex flex-wrap gap-4 items-center text-sm text-white">
+        <!-- Timeframe -->
+        <div class="flex gap-1">
+            <button 
+                v-for="tf in timeframes" 
+                :key="tf.label"
+                @click="timeframe = tf.label"
+                :class="['px-2 py-1 rounded', timeframe === tf.label ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600']"
+            >
+                {{ tf.label }}
+            </button>
+        </div>
+        
+        <!-- Chart Type -->
+        <div class="flex gap-1 border-l border-gray-600 pl-4">
+            <button @click="chartType = 'Candlestick'" :class="['px-2 py-1 rounded', chartType === 'Candlestick' ? 'bg-blue-600' : 'bg-gray-700']">Candle</button>
+            <button @click="chartType = 'Line'" :class="['px-2 py-1 rounded', chartType === 'Line' ? 'bg-blue-600' : 'bg-gray-700']">Line</button>
+        </div>
+
+        <!-- Overlays -->
+        <div class="flex gap-4 border-l border-gray-600 pl-4 items-center">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" v-model="overlayIndex" />
+                Index Futures (ES)
+            </label>
+            
+            <div class="flex items-center gap-2">
+                <input 
+                    v-if="!overlaySymbol"
+                    type="text" 
+                    v-model="overlaySymbolInput" 
+                    @keyup.enter="addOverlay"
+                    placeholder="Compare..." 
+                    class="w-24 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white uppercase"
+                />
+                <div v-else class="flex items-center gap-2 bg-purple-900 px-2 py-1 rounded">
+                    <span>{{ overlaySymbol }}</span>
+                    <button @click="removeOverlay" class="text-xs text-red-400 hover:text-red-300">X</button>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <TradingChart :seriesList="seriesList" />
     </div>
 
     <!-- Right Panel: Order Entry -->
@@ -57,11 +102,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import QuoteHeader from '../components/trade/QuoteHeader.vue';
 import TradingChart from '../components/trade/TradingChart.vue';
 import EnhancedTradeForm from '../components/trade/EnhancedTradeForm.vue';
-import { getQuote, executeTrade } from '../services/portfolio'; // Import service functions
+import { getQuote, executeTrade, getHistory } from '../services/portfolio';
 
 const activeSymbol = ref('AAPL');
 const searchQuery = ref('');
@@ -75,12 +120,70 @@ const quoteData = reactive({
   volume: 0
 });
 
-// Dummy data for MVP (Chart data remains dummy as no backend endpoint for history yet)
-const chartData = ref([
-  { time: '2023-01-01', open: 145, high: 150, low: 144, close: 148 },
-  { time: '2023-01-02', open: 148, high: 152, low: 147, close: 150 },
-  { time: '2023-01-03', open: 150, high: 155, low: 149, close: 153 },
-]);
+// Charting State
+const seriesList = ref([]);
+const chartType = ref('Candlestick'); // 'Candlestick' or 'Line'
+const timeframe = ref('1Y'); // Default
+const overlayIndex = ref(false); // ES Future
+const overlaySymbol = ref(''); 
+const overlaySymbolInput = ref('');
+
+const timeframes = [
+  { label: '1D', resolution: '1', limit: 390 },
+  { label: '5D', resolution: '5', limit: 390 }, // approx
+  { label: '1M', resolution: '60', limit: 160 },
+  { label: '3M', resolution: 'D', limit: 90 },
+  { label: '1Y', resolution: 'D', limit: 252 },
+  { label: '5Y', resolution: 'D', limit: 1260 },
+];
+
+const fetchChartData = async () => {
+  try {
+    const tf = timeframes.find(t => t.label === timeframe.value) || timeframes[4];
+    const mainHistory = await getHistory(activeSymbol.value, tf.resolution, tf.limit);
+    
+    const newSeries = [];
+    
+    // Main Series
+    if (chartType.value === 'Candlestick') {
+      newSeries.push({
+        type: 'Candlestick',
+        data: mainHistory.candles,
+        options: { upColor: '#26a69a', downColor: '#ef5350', borderVisible: false, wickUpColor: '#26a69a', wickDownColor: '#ef5350' }
+      });
+    } else {
+      newSeries.push({
+        type: 'Line',
+        data: mainHistory.candles.map(c => ({ time: c.time, value: c.close })),
+        options: { color: '#2962FF', lineWidth: 3 }
+      });
+    }
+    
+    // Overlays
+    if (overlayIndex.value) {
+      const esHistory = await getHistory('ES', tf.resolution, tf.limit);
+      newSeries.push({
+        type: 'Line',
+        data: esHistory.candles.map(c => ({ time: c.time, value: c.close })),
+        options: { color: '#FFA726', lineWidth: 2, priceScaleId: 'left' }
+      });
+    }
+    
+    if (overlaySymbol.value) {
+      const ovHistory = await getHistory(overlaySymbol.value, tf.resolution, tf.limit);
+      newSeries.push({
+        type: 'Line',
+        data: ovHistory.candles.map(c => ({ time: c.time, value: c.close })),
+        options: { color: '#AB47BC', lineWidth: 2, priceScaleId: 'left' } // Shared left axis for overlays for now
+      });
+    }
+    
+    seriesList.value = newSeries;
+
+  } catch (error) {
+    console.error('Failed to fetch chart data:', error);
+  }
+};
 
 const fetchQuote = async (symbol) => {
   try {
@@ -88,14 +191,16 @@ const fetchQuote = async (symbol) => {
     quoteData.price = data.price;
     quoteData.change = data.change;
     quoteData.percentChange = data.percent_change;
-    // Mock extra fields if not in API response
     quoteData.open = data.price - data.change; 
     quoteData.high = data.price + 1.0;
     quoteData.low = data.price - 1.0;
     quoteData.volume = 1000000;
+    
+    await fetchChartData();
+
   } catch (error) {
     console.error('Failed to fetch quote:', error);
-    // Reset or show error state
+    alert(`Symbol '${symbol}' not found or service unavailable.`);
   }
 };
 
@@ -105,6 +210,22 @@ const searchSymbol = () => {
     fetchQuote(activeSymbol.value);
   }
 };
+
+const addOverlay = () => {
+  if (overlaySymbolInput.value) {
+    overlaySymbol.value = overlaySymbolInput.value.toUpperCase();
+    fetchChartData();
+    overlaySymbolInput.value = '';
+  }
+};
+
+const removeOverlay = () => {
+  overlaySymbol.value = '';
+  fetchChartData();
+};
+
+// Watchers for controls
+watch([timeframe, chartType, overlayIndex], fetchChartData);
 
 onMounted(() => {
   fetchQuote(activeSymbol.value);

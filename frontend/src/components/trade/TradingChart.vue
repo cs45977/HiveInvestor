@@ -4,15 +4,16 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
-import { createChart, CandlestickSeries } from 'lightweight-charts';
+import { createChart, CandlestickSeries, LineSeries } from 'lightweight-charts';
 
 const props = defineProps({
-  data: { type: Array, required: true } // Array of { time, open, high, low, close }
+  seriesList: { type: Array, required: true } 
+  // Array of { type: 'Candlestick'|'Line', data: [], options: {} }
 });
 
 const chartContainer = ref(null);
 let chart = null;
-let candlestickSeries = null;
+let activeSeries = [];
 
 onMounted(() => {
   if (chartContainer.value) {
@@ -21,9 +22,10 @@ onMounted(() => {
       height: chartContainer.value.clientHeight,
       layout: { backgroundColor: '#111827', textColor: '#D1D5DB' },
       grid: { vertLines: { color: '#374151' }, horzLines: { color: '#374151' } },
+      timeScale: { timeVisible: true, secondsVisible: false }
     });
-    candlestickSeries = chart.addSeries(CandlestickSeries);
-    candlestickSeries.setData(props.data);
+    
+    updateSeries();
   }
   
   window.addEventListener('resize', handleResize);
@@ -42,9 +44,28 @@ const handleResize = () => {
   }
 };
 
-watch(() => props.data, (newData) => {
-  if (candlestickSeries) {
-    candlestickSeries.setData(newData);
-  }
-});
+const updateSeries = () => {
+  if (!chart) return;
+  
+  // Remove old series
+  activeSeries.forEach(s => chart.removeSeries(s));
+  activeSeries = [];
+  
+  // Add new series
+  props.seriesList.forEach(config => {
+    let series;
+    if (config.type === 'Candlestick') {
+      series = chart.addSeries(CandlestickSeries, config.options || {});
+    } else if (config.type === 'Line') {
+      series = chart.addSeries(LineSeries, config.options || {});
+    }
+    
+    if (series) {
+      series.setData(config.data);
+      activeSeries.push(series);
+    }
+  });
+};
+
+watch(() => props.seriesList, updateSeries, { deep: true });
 </script>

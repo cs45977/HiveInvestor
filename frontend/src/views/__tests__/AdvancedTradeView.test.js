@@ -8,6 +8,7 @@ import { getQuote, executeTrade } from '../../services/portfolio'
 // Mock portfolio service
 vi.mock('../../services/portfolio', () => ({
   getQuote: vi.fn(() => Promise.resolve({ price: 150, change: 1.5, percent_change: 1.0 })),
+  getHistory: vi.fn(() => Promise.resolve({ symbol: 'AAPL', candles: [] })),
   executeTrade: vi.fn(() => Promise.resolve({}))
 }))
 
@@ -17,10 +18,12 @@ vi.mock('lightweight-charts', () => ({
     addSeries: vi.fn(() => ({
       setData: vi.fn()
     })),
+    removeSeries: vi.fn(),
     remove: vi.fn(),
     applyOptions: vi.fn()
   })),
-  CandlestickSeries: class {}
+  CandlestickSeries: class {},
+  LineSeries: class {}
 }))
 
 describe('AdvancedTradeView', () => {

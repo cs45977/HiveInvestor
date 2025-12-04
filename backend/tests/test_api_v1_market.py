@@ -75,3 +75,12 @@ def test_get_quote_unauthenticated():
     
     # Restore override for other tests if needed (though pytest order matters)
     app.dependency_overrides[get_current_user] = mock_get_current_user
+
+def test_get_history_endpoint():
+    # Test history endpoint
+    response = client.get("/api/v1/market/history/AAPL?resolution=D&limit=10")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["symbol"] == "AAPL"
+    assert len(data["candles"]) == 10
+    assert "open" in data["candles"][0]

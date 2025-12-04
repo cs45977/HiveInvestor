@@ -29,6 +29,14 @@ export const getQuote = async (symbol) => {
     return response.data
 }
 
+export const getHistory = async (symbol, resolution, limit) => {
+    const response = await axios.get(`${API_URL}/market/history/${symbol}`, {
+        params: { resolution, limit }
+    })
+    return response.data
+}
+
+
 
 
 export const getTransactions = async () => {
