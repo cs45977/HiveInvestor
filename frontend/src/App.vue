@@ -13,6 +13,7 @@ const auth = useAuthStore()
         <div class="flex items-center">
           <RouterLink to="/" class="text-white text-xl font-bold hover:text-gray-300">HiveInvestor</RouterLink>
           <RouterLink v-if="auth.authState.isAuthenticated" to="/dashboard" class="ml-4 hover:text-gray-300">Dashboard</RouterLink>
+          <RouterLink v-if="auth.authState.isAuthenticated" to="/trade" class="ml-4 hover:text-gray-300">Trade</RouterLink>
           <RouterLink v-if="auth.authState.isAuthenticated" to="/leaderboard" class="ml-4 hover:text-gray-300">Leaderboard</RouterLink>
           <RouterLink v-if="auth.authState.isAuthenticated" to="/profile" class="ml-4 hover:text-gray-300">Profile</RouterLink>
           <RouterLink v-if="auth.authState.isAuthenticated && auth.isAdmin.value" to="/admin" class="ml-4 hover:text-gray-300">Admin</RouterLink>

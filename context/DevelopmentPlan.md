@@ -142,3 +142,36 @@ This development plan outlines the epics and stories for building the HiveInvest
 *   **Story 4.4: Frontend Testing Plan**
     *   **Description:** Create a document outlining the testing strategy and specific test cases for the Vue.js frontend.
     *   **Status:** Complete
+
+## Epic 5: Advanced Research and Trading Interface
+**Objective:** Implement a professional-grade trading interface with advanced charting, real-time data analysis, and sophisticated order entry capabilities.
+
+### Stories:
+
+*   **Story 5.1: Unified Research & Order Entry Layout**
+    *   **Description:** Refactor the Trade page to use a split-pane layout (Research Panel / Order Entry Panel) responsive for desktop and mobile.
+    *   **Status:** Complete
+
+*   **Story 5.2: Enhanced Quote Header**
+    *   **Description:** Implement a component to display real-time quote data including LTP, Change, % Change, Day's High/Low, 52w High/Low, Volume, and Open. Connect to market data service.
+    *   **Status:** Complete
+
+*   **Story 5.3: Interactive Charting Component**
+    *   **Description:** Integrate a charting library (e.g., Lightweight Charts) to display interactive candlestick/line charts with timeframe selection (1D-MAX) and basic technical indicators.
+    *   **Status:** Complete
+
+*   **Story 5.4: Limit Order Support (Backend)**
+    *   **Description:** Update `Trade` model and `POST /api/v1/trade` endpoint to accept `order_type` (MARKET, LIMIT) and `limit_price`. Implement validation logic for limit orders.
+    *   **Status:** Complete
+
+*   **Story 5.5: Enhanced Order Entry Form (Frontend)**
+    *   **Description:** Upgrade the frontend trade form to support Buy/Sell toggle, Market/Limit selection, conditional limit price input, and dynamic quantity selectors (25%, 50%, 100%).
+    *   **Status:** Complete
+
+*   **Story 5.6: Time in Force (TIF) Support**
+    *   **Description:** Add `time_in_force` (DAY, GTC) to backend trade model and frontend form. Implement expiration logic for DAY orders (scheduled job or check-on-access).
+    *   **Status:** Complete (Data support & validation implemented. Expiration logic deferred as per MVP scope).
+
+*   **Story 5.7: Trade Confirmation Modal**
+    *   **Description:** Implement a confirmation modal that summarizes the trade (Estimated Cost/Revenue) before final submission.
+    *   **Status:** Complete
