@@ -5,7 +5,7 @@ import HoldingsTable from '../components/portfolio/HoldingsTable.vue'
 import TradeForm from '../components/trade/TradeForm.vue'
 import TransactionHistory from '../components/portfolio/TransactionHistory.vue'
 import StockWatchlist from '../components/market/StockWatchlist.vue'
-import { getPortfolio, getTransactions } from '../services/portfolio'
+import { getPortfolio, getTransactions, getQuote } from '../services/portfolio'
 
 const portfolio = ref(null)
 const transactions = ref([])
@@ -15,6 +15,25 @@ const error = ref(null)
 const fetchData = async () => {
   try {
     const [p, t] = await Promise.all([getPortfolio(), getTransactions()])
+    
+    // Enrich holdings with current price
+    if (p && p.holdings) {
+        const enrichedHoldings = await Promise.all(p.holdings.map(async (h) => {
+            try {
+                const quote = await getQuote(h.symbol);
+                return { ...h, current_price: quote.price };
+            } catch (e) {
+                console.error(`Failed to fetch quote for ${h.symbol}`, e);
+                return { ...h, current_price: h.average_price }; // Fallback
+            }
+        }));
+        p.holdings = enrichedHoldings;
+        
+        // Recalculate total real-time value
+        const holdingsValue = enrichedHoldings.reduce((sum, h) => sum + (h.quantity * h.current_price), 0);
+        p.total_value = p.cash_balance + holdingsValue;
+    }
+    
     portfolio.value = p
     transactions.value = t
   } catch (err) {
