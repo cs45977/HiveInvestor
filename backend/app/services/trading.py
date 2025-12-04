@@ -95,27 +95,55 @@ def update_in_transaction(transaction, portfolio_ref, trade_request, price):
 async def execute_trade(user_id: str, trade_request: TradeRequest, db) -> dict:
     quote = await get_real_time_quote(trade_request.symbol)
     
+    # Check Limit Order Condition
+    if trade_request.order_type == "LIMIT":
+        is_buy_marketable = trade_request.type == "BUY" and quote.price <= trade_request.limit_price
+        is_sell_marketable = trade_request.type == "SELL" and quote.price >= trade_request.limit_price
+        
+        if not (is_buy_marketable or is_sell_marketable):
+            # Order is not marketable, save as PENDING
+            # In a real system, we'd reserve cash/inventory here. For MVP, we just log it.
+            transaction_data = {
+                "id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "symbol": trade_request.symbol,
+                "type": trade_request.type,
+                "order_type": trade_request.order_type,
+                "limit_price": trade_request.limit_price,
+                "time_in_force": trade_request.time_in_force,
+                "quantity": trade_request.quantity,
+                "status": "PENDING",
+                "timestamp": datetime.now(timezone.utc),
+                "price_per_share": None,
+                "total_amount": None,
+                "commission": None
+            }
+            # Save to a 'pending_orders' collection ideally, or 'transactions' with status
+            db.collection("transactions").document(transaction_data["id"]).set(transaction_data)
+            return transaction_data
+
     transaction = db.transaction()
     portfolio_ref = db.collection("portfolios").document(user_id)
     
-    # Execute transaction
+    # Execute transaction (Market or Marketable Limit)
     amount, updated_portfolio = update_in_transaction(transaction, portfolio_ref, trade_request, quote.price)
     
-    # Create Transaction Record (outside atomic transaction for simplicity, or inside if critical)
-    # Usually log usage is fine outside.
     transaction_data = {
         "id": str(uuid.uuid4()),
         "user_id": user_id,
         "symbol": trade_request.symbol,
         "type": trade_request.type,
+        "order_type": trade_request.order_type,
+        "limit_price": trade_request.limit_price if trade_request.order_type == "LIMIT" else None,
+        "time_in_force": trade_request.time_in_force,
         "quantity": trade_request.quantity,
+        "status": "EXECUTED",
         "price_per_share": quote.price,
         "total_amount": round(amount, 2),
         "commission": COMMISSION_FEE,
         "timestamp": datetime.now(timezone.utc)
     }
     
-    # Add to subcollection or root collection
     db.collection("transactions").document(transaction_data["id"]).set(transaction_data)
     
     return transaction_data
