@@ -17,11 +17,15 @@ def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
+        # print(f"DEBUG: Validating token: {token[:10]}...") 
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         user_id: str = payload.get("sub")
+        # print(f"DEBUG: Token valid. User ID: {user_id}")
         if user_id is None:
+            print("DEBUG: User ID is None")
             raise credentials_exception
-    except (JWTError, ValidationError):
+    except (JWTError, ValidationError) as e:
+        print(f"DEBUG: JWT Error: {e}")
         raise credentials_exception
         
     user_ref = db.collection("users").document(user_id)

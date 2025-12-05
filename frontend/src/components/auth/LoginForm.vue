@@ -13,7 +13,7 @@ const handleSubmit = async () => {
   try {
     await login(email.value, password.value)
     // Store token logic would happen here or in the service
-    router.push('/')
+    router.push('/dashboard')
   } catch (error) {
      if (error.response && error.response.data && error.response.data.detail) {
         errorMessage.value = error.response.data.detail

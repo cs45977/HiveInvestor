@@ -1,9 +1,8 @@
-venv/
-host_venv/
+.git
+.gitignore
+.venv/
 __pycache__/
 *.pyc
 .DS_Store
 .env
-
 firebase_data/
-backend/gcp_credentials.json
