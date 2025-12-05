@@ -2,8 +2,8 @@ fastapi
 uvicorn[standard]
 pytest
 httpx
-google-cloud-firestore==2.11.1
-google-api-core==2.11.1
+google-cloud-firestore>=2.19.0
+google-api-core>=2.15.0
 passlib[bcrypt]
 python-jose[cryptography]
 python-multipart

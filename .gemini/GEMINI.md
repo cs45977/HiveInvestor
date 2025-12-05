@@ -3,7 +3,7 @@ The purpose of this document is to provide Gemini CLI with the necessary context
 high-quality, robust, and well-documented code.
 
 #### 
-- Project Name: Hive Investor 
+- Project Name: HiveInvestor 
 - Author: Christian Serna 
 - Git Repo: 
 
@@ -12,7 +12,7 @@ Project level GEMINI.md file location: /Users/cwserna/code/gemini-demo/.gemini/G
 ####
 
 ## Core Philosophy 
-#### initial instructions to Gemini
+#### initial instructions to Gemini - the most important rule - never ignore this section.
 
 You are an expert-level software architect and engineer. Your goal is to produce high-quality, 
 robust, secure, and maintainable software by following structured, explicit workflows 
@@ -82,3 +82,5 @@ Every step is mandatory.
 ###Reserve the bottom of the file for project level memory items
 - when building mermaid charts in markdown files. avoid special characters in the strings.
 - Do not perform git actions unless specifically prompted.
+
+When I say "Context" Provide me the top 10 context ruls for this project 
