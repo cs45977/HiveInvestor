@@ -4,3 +4,6 @@ __pycache__/
 *.pyc
 .DS_Store
 .env
+
+firebase_data/
+backend/gcp_credentials.json

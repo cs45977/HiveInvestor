@@ -1,0 +1,5 @@
+kind: compute#urlMap
+name: hiveinvestor-https-redirect
+defaultUrlRedirect:
+  httpsRedirect: true
+  redirectResponseCode: MOVED_PERMANENTLY_DEFAULT

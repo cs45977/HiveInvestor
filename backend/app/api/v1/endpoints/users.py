@@ -3,6 +3,8 @@ from app.models.user import UserCreate, UserResponse
 from app.db.firestore import get_db
 from app.api.deps import get_current_user
 from app.core import security
+from app.models.portfolio import PortfolioInDB
+from datetime import datetime, timezone
 import uuid
 
 router = APIRouter()
@@ -30,6 +32,17 @@ def register_user(user: UserCreate, db=Depends(get_db)):
     }
     
     users_ref.document(user_id).set(user_doc)
+    
+    # Create default portfolio
+    new_portfolio = PortfolioInDB(
+        user_id=user_id,
+        cash_balance=100000.0,
+        total_value=100000.0,
+        holdings=[],
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc)
+    )
+    db.collection("portfolios").document(user_id).set(new_portfolio.model_dump())
     
     return user_doc
 

@@ -1,5 +1,28 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterView, useRouter } from 'vue-router'
+import { ref, onMounted, watch } from 'vue'
+
+const router = useRouter()
+const isLoggedIn = ref(false)
+
+const checkLoginStatus = () => {
+  isLoggedIn.value = !!localStorage.getItem('token')
+}
+
+const logout = () => {
+  localStorage.removeItem('token')
+  isLoggedIn.value = false
+  router.push('/login')
+}
+
+onMounted(() => {
+  checkLoginStatus()
+})
+
+// Watch for route changes to update login status (e.g. after login redirect)
+watch(() => router.currentRoute.value, () => {
+  checkLoginStatus()
+})
 </script>
 
 <template>
@@ -7,8 +30,16 @@ import { RouterView } from 'vue-router'
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/register">Register</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
+        <template v-if="!isLoggedIn">
+          <RouterLink to="/register">Register</RouterLink>
+          <RouterLink to="/login">Login</RouterLink>
+        </template>
+        <template v-else>
+          <RouterLink to="/dashboard">Dashboard</RouterLink>
+          <RouterLink to="/trade">Trade</RouterLink>
+          <RouterLink to="/leaderboard">Leaderboard</RouterLink>
+          <a href="#" @click.prevent="logout">Logout</a>
+        </template>
       </nav>
     </div>
   </header>

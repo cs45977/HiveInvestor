@@ -49,3 +49,5 @@ This is the most critical difference and addresses the need for continuous compe
 | **Reporting** | Portfolio Summary (Current Value, Cash Balance, Unrealized Gain/Loss), Transaction History. | Persistent storage in Firestore, updated upon trade execution. |
 
 ## 
+
+
