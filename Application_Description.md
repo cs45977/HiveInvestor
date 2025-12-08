@@ -48,6 +48,7 @@ This is the most critical difference and addresses the need for continuous compe
 | **Transaction Rules** | Standard commission/transaction fees must be applied (e.g., $\\$10$ flat commission per trade) to mirror real-world costs. | Portfolio value calculation must subtract fees. |
 | **Reporting** | Portfolio Summary (Current Value, Cash Balance, Unrealized Gain/Loss), Transaction History. | Persistent storage in Firestore, updated upon trade execution. |
 
-## 
+## **5. Technical & Security Requirements**
 
+*   **Secrets Management:** All sensitive production secrets (API keys, database credentials, etc.) must be stored securely using **GCP Secret Manager**. Hardcoding secrets in the codebase is strictly prohibited.
 

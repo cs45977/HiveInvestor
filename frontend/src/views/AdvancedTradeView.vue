@@ -12,7 +12,7 @@
         <button @click="searchSymbol" class="bg-blue-600 text-white px-6 rounded font-bold">GO</button>
       </div>
 
-      <QuoteHeader v-bind="quoteData" :symbol="activeSymbol" />
+      <QuoteHeader v-bind="quoteData" :symbol="activeSymbol" :mock-quote="quoteData.mockQuote" />
 
       <!-- Chart Controls -->
       <div class="bg-gray-800 text-white p-2 rounded-t flex justify-between items-center text-sm">
@@ -117,7 +117,9 @@ const quoteData = reactive({
   open: 0,
   high: 0,
   low: 0,
-  volume: 0
+  low: 0,
+  volume: 0,
+  mockQuote: false
 });
 
 const currentHolding = ref(null); // New reactive variable
@@ -219,7 +221,9 @@ const fetchQuote = async (symbol) => {
     quoteData.open = data.price - data.change; 
     quoteData.high = data.price + 1.0;
     quoteData.low = data.price - 1.0;
+    quoteData.low = data.price - 1.0;
     quoteData.volume = 1000000;
+    quoteData.mockQuote = data['mock-quote'] || false;
     
     await fetchChartData();
     await fetchPortfolioHolding();

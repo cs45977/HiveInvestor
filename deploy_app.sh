@@ -50,11 +50,6 @@ if [ "$DEPLOY_BACKEND" = true ]; then
     echo "  - Submitting Build..."
     gcloud builds submit --tag $BACKEND_IMAGE
 
-    # Load API Key from .env
-    if [ -f backend/.env ]; then
-        export $(grep FINNHUB_API_KEY backend/.env | xargs)
-    fi
-
     echo "  - Deploying to Cloud Run..."
     gcloud run deploy $BACKEND_SERVICE_NAME \
         --image $BACKEND_IMAGE \
@@ -62,7 +57,8 @@ if [ "$DEPLOY_BACKEND" = true ]; then
         --region $REGION \
         --allow-unauthenticated \
         --port 8000 \
-        --set-env-vars GOOGLE_CLOUD_PROJECT=$PROJECT_ID,FIRESTORE_DATABASE=$FIRESTORE_DATABASE,FINNHUB_API_KEY=$FINNHUB_API_KEY
+        --set-env-vars GOOGLE_CLOUD_PROJECT=$PROJECT_ID,FIRESTORE_DATABASE=$FIRESTORE_DATABASE \
+        --set-secrets=FINNHUB_API_KEY=FINNHUB_API_KEY:latest
     
     cd ..
 else
