@@ -19,7 +19,8 @@ async def get_real_time_quote(symbol: str) -> StockQuote:
             symbol=symbol,
             price=round(base_price + change, 2),
             change=round(change, 2),
-            percent_change=round((change / base_price) * 100, 2)
+            percent_change=round((change / base_price) * 100, 2),
+            mock_quote=True
         )
 
     async with httpx.AsyncClient() as client:
@@ -32,7 +33,8 @@ async def get_real_time_quote(symbol: str) -> StockQuote:
             symbol=symbol,
             price=100.0,
             change=0.0,
-            percent_change=0.0
+            percent_change=0.0,
+            mock_quote=True
         )
         
     data = response.json()

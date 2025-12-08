@@ -7,6 +7,7 @@ const backendStatus = ref('Checking connection...')
 const databaseStatus = ref('Checking...')
 const databaseName = ref('')
 const isConnected = ref(false)
+const isMockMode = ref(false)
 
 const API_URL = import.meta.env.VITE_API_URL || '/api/v1'
 // The status endpoint is at /api/status, not /api/v1/status in the current main.py
@@ -27,10 +28,12 @@ onMounted(async () => {
     const baseUrl = import.meta.env.VITE_API_URL || ''
     const response = await axios.get(`${baseUrl}/api/status`)
     
+
     if (response.data.status) {
       backendStatus.value = response.data.status
       databaseStatus.value = response.data.database_status
       databaseName.value = response.data.database_name
+      isMockMode.value = response.data.mock_mode || false
       isConnected.value = true
     }
   } catch (error) {
@@ -53,6 +56,10 @@ onMounted(async () => {
         </p>
         <p v-if="isConnected" :class="{'text-green-600': databaseStatus === 'Connected', 'text-red-500': databaseStatus !== 'Connected'}">
           <span class="font-semibold">Database ({{ databaseName }}):</span> {{ databaseStatus }}
+        </p>
+        <p v-if="isConnected">
+            <span class="font-semibold">Quote Service:</span> 
+            <span :class="{'text-yellow-600 font-bold': isMockMode, 'text-green-600': !isMockMode}">{{ isMockMode ? 'MOCK DATA' : 'LIVE' }}</span>
         </p>
       </div>
     </div>

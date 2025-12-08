@@ -1,0 +1,86 @@
+[debug] [2025-12-08T21:50:35.170Z] ----------------------------------------------------------------------
+[debug] [2025-12-08T21:50:35.180Z] Command:       /usr/local/bin/firebase /home/vagrant/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase emulators:start --only firestore --project=demo-project --import=/vagrant/backend/firebase-data
+[debug] [2025-12-08T21:50:35.181Z] CLI Version:   14.27.0
+[debug] [2025-12-08T21:50:35.181Z] Platform:      linux
+[debug] [2025-12-08T21:50:35.181Z] Node Version:  v20.18.2
+[debug] [2025-12-08T21:50:35.181Z] Time:          Mon Dec 08 2025 21:50:35 GMT+0000 (Coordinated Universal Time)
+[debug] [2025-12-08T21:50:35.182Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-12-08T21:50:36.202Z] openjdk version "21.0.7" 2025-04-15
+
+[debug] [2025-12-08T21:50:36.205Z] OpenJDK Runtime Environment (build 21.0.7+6-Ubuntu-0ubuntu120.04)
+OpenJDK 64-Bit Server VM (build 21.0.7+6-Ubuntu-0ubuntu120.04, mixed mode, sharing)
+
+[debug] [2025-12-08T21:50:36.224Z] Parsed Java major version: 21
+[info] i  emulators: Starting emulators: firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: firestore"}}
+[info] i  emulators: Detected demo project ID "demo-project", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail. {"metadata":{"emulator":{"name":"hub"},"message":"Detected demo project ID \"demo-project\", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail."}}
+[debug] [2025-12-08T21:50:36.248Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-08T21:50:36.249Z] assigned listening specs for emulators {"user":{"ui":[{"address":"0.0.0.0","family":"IPv4","port":4000}],"firestore":[{"address":"0.0.0.0","family":"IPv4","port":8090}],"firestore.websocket":[{"address":"0.0.0.0","family":"IPv4","port":9150}],"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2025-12-08T21:50:36.259Z] Emulator locator file path: /tmp/hub-demo-project.json
+[debug] [2025-12-08T21:50:36.260Z] [hub] writing locator at /tmp/hub-demo-project.json
+[info] i  firestore: Importing data from /vagrant/backend/firebase-data/firestore_export/firestore_export.overall_export_metadata {"metadata":{"emulator":{"name":"firestore"},"message":"Importing data from /vagrant/backend/firebase-data/firestore_export/firestore_export.overall_export_metadata"}}
+[warn] ⚠  firestore: Cloud Firestore Emulator does not support multiple databases yet. {"metadata":{"emulator":{"name":"firestore"},"message":"Cloud Firestore Emulator does not support multiple databases yet."}}
+[warn] ⚠  firestore: Did not find a Cloud Firestore rules file specified in a firebase.json config file. {"metadata":{"emulator":{"name":"firestore"},"message":"Did not find a Cloud Firestore rules file specified in a firebase.json config file."}}
+[warn] ⚠  firestore: The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration. {"metadata":{"emulator":{"name":"firestore"},"message":"The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration."}}
+[debug] [2025-12-08T21:50:36.297Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-12-08T21:50:36.297Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2025-12-08T21:50:36.297Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/home/vagrant/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.8.jar","--host","0.0.0.0","--port",8090,"--websocket_port",9150,"--project_id","demo-project","--seed_from_export","/vagrant/backend/firebase-data/firestore_export/firestore_export.overall_export_metadata","--single_project_mode",true],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8090} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/home/vagrant/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.8.jar\",\"--host\",\"0.0.0.0\",\"--port\",8090,\"--websocket_port\",9150,\"--project_id\",\"demo-project\",\"--seed_from_export\",\"/vagrant/backend/firebase-data/firestore_export/firestore_export.overall_export_metadata\",\"--single_project_mode\",true],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8090}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to firestore-debug.log"}}
+[debug] [2025-12-08T21:50:41.242Z] Dec 08, 2025 9:50:41 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://0.0.0.0:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:50:41 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://0.0.0.0:9150\n"}}
+[debug] [2025-12-08T21:50:41.324Z] API endpoint: http://0.0.0.0:8090
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=0.0.0.0:8090
+
+If you are running a Firestore in Datastore Mode project, run:
+
+   export DATASTORE_EMULATOR_HOST=0.0.0.0:8090
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://0.0.0.0:8090\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n\n   export FIRESTORE_EMULATOR_HOST=0.0.0.0:8090\n\nIf you are running a Firestore in Datastore Mode project, run:\n\n   export DATASTORE_EMULATOR_HOST=0.0.0.0:8090\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\nDev App Server is now running.\n\n"}}
+[info] ✔  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2025-12-08T21:50:41.498Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: connect ECONNREFUSED 127.0.0.1:40001. If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬──────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port    │ View in Emulator UI             │
+├───────────┼──────────────┼─────────────────────────────────┤
+│ Firestore │ 0.0.0.0:8090 │ http://127.0.0.1:4000/firestore │
+└───────────┴──────────────┴─────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2025-12-08T21:51:13.508Z] Dec 08, 2025 9:51:13 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:51:13 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2025-12-08T21:51:15.519Z] Dec 08, 2025 9:51:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:51:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2025-12-08T21:51:18.896Z] Dec 08, 2025 9:51:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:51:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2025-12-08T21:51:20.578Z] Dec 08, 2025 9:51:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:51:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2025-12-08T21:51:21.395Z] Dec 08, 2025 9:51:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:51:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2025-12-08T21:51:21.756Z] Dec 08, 2025 9:51:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:51:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2025-12-08T21:51:21.831Z] Dec 08, 2025 9:51:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:51:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2025-12-08T21:54:48.726Z] Dec 08, 2025 9:54:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 08, 2025 9:54:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}

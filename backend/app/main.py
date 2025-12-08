@@ -26,6 +26,7 @@ def read_root():
 
 import os
 from app.db.firestore import get_db
+from app.core.config import settings
 
 @app.get("/api/status")
 def get_status():
@@ -46,5 +47,6 @@ def get_status():
     return {
         "status": "Backend Connected",
         "database_status": db_status,
-        "database_name": db_name
+        "database_name": db_name,
+        "mock_mode": settings.FINNHUB_API_KEY == "mock-key"
     }

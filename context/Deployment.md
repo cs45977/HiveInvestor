@@ -151,11 +151,21 @@ gcloud scheduler jobs create pubsub daily-portfolio-evaluation \
 #### Secrets Management (Google Secret Manager)
 
 1.  **Store your secrets:**
+    The `FINNHUB_API_KEY` is used by the backend to fetch market data.
     ```bash
-    echo -n "your-api-key-value" | gcloud secrets create API_KEY --data-file=-
+    # Create or Update the secret
+    echo -n "your-finnhub-api-key" | gcloud secrets versions add FINNHUB_API_KEY --data-file=-
     ```
+    *(Note: The secret `FINNHUB_API_KEY` has already been created. Use the command above to rotate/update the key.)*
+
 2.  **Grant access to Cloud Run Service Account:**
-    Ensure the Cloud Run service account (`PROJECT_NUMBER-compute@developer.gserviceaccount.com`) has the `Secret Manager Secret Accessor` role.
+    The Cloud Run service account (`392938340114-compute@developer.gserviceaccount.com`) has been granted the `Secret Manager Secret Accessor` role for this secret.
+    If you redeploy or create a new service account, ensure this role is granted:
+    ```bash
+    gcloud secrets add-iam-policy-binding FINNHUB_API_KEY \
+        --member="serviceAccount:392938340114-compute@developer.gserviceaccount.com" \
+        --role="roles/secretmanager.secretAccessor"
+    ```
 
 ---
 
