@@ -42,9 +42,16 @@ def get_portfolio(
     portfolio_doc = portfolio_ref.get()
     
     if not portfolio_doc.exists:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Portfolio not found"
+        # Lazy creation of portfolio for new users
+        new_portfolio = PortfolioInDB(
+            user_id=user_id,
+            cash_balance=100000.0,
+            total_value=100000.0,
+            holdings=[],
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc)
         )
+        portfolio_ref.set(new_portfolio.model_dump())
+        return new_portfolio
         
     return portfolio_doc.to_dict()
