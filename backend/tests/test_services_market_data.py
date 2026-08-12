@@ -6,11 +6,25 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.services.market_data import get_real_time_quote
+from app.core.config import settings
 from fastapi import HTTPException
 
 @pytest.fixture
 def anyio_backend():
     return 'asyncio'
+
+@pytest.fixture(autouse=True)
+def _use_real_finnhub_key():
+    # get_real_time_quote short-circuits to random mock data whenever
+    # FINNHUB_API_KEY == "mock-key" (the test-suite default), which means
+    # these tests never actually reached the httpx-mocked code path they
+    # were written to exercise. Force a non-mock key for the duration of
+    # each test here so the httpx.AsyncClient patch below is the thing that
+    # actually determines the result.
+    original = settings.FINNHUB_API_KEY
+    settings.FINNHUB_API_KEY = "test-real-key"
+    yield
+    settings.FINNHUB_API_KEY = original
 
 @pytest.mark.anyio
 async def test_get_quote_success():
@@ -70,7 +84,7 @@ async def test_get_quote_invalid_symbol():
         assert exc_info.value.status_code == 404
 
 @pytest.mark.anyio
-async def test_get_quote_api_failure_returns_fallback_data():
+async def test_get_quote_api_failure_raises_503():
     mock_response = MagicMock()
     mock_response.status_code = 500
     mock_response.text = "Internal Server Error" # Add some text for logging
@@ -81,10 +95,10 @@ async def test_get_quote_api_failure_returns_fallback_data():
     mock_client.__aexit__.return_value = None
 
     with patch("app.services.market_data.httpx.AsyncClient", return_value=mock_client):
-        quote = await get_real_time_quote("AAPL")
-        
-        assert quote.symbol == "AAPL"
-        assert quote.price == 100.0
-        assert quote.change == 0.0
-        assert quote.percent_change == 0.0
+        # Upstream failure must now raise a 503 instead of silently
+        # returning a fabricated price (was: price == 100.0 fallback).
+        with pytest.raises(HTTPException) as exc_info:
+            await get_real_time_quote("AAPL")
+
+        assert exc_info.value.status_code == 503
 

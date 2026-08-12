@@ -27,12 +27,15 @@ async def get_real_time_quote(symbol: str) -> StockQuote:
         
     if response.status_code != 200:
         print(f"Finnhub Error: {response.status_code} - {response.text}") # Debug logging
-        # Fallback to mock data if service is unavailable to prevent breaking the app
-        return StockQuote(
-            symbol=symbol,
-            price=100.0,
-            change=0.0,
-            percent_change=0.0
+        # Previously this silently returned a fabricated price (100.0) as if
+        # it were real, so a user could buy/sell at a made-up price during a
+        # Finnhub outage with nothing in the trade record distinguishing a
+        # real quote from a fake one. Fail loudly instead: the caller (the
+        # trade endpoint) should surface this as a 503 rather than execute a
+        # trade against invented data.
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Market data provider unavailable for {symbol}. Please try again shortly."
         )
         
     data = response.json()
