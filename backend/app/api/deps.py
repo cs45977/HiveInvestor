@@ -35,3 +35,19 @@ def get_current_user(
         raise credentials_exception
         
     return user_doc.to_dict()
+
+
+def require_admin(current_user: dict = Depends(get_current_user)) -> dict:
+    """
+    Gate for admin-only endpoints. Existing users created before the role
+    field was introduced won't have a "role" key at all -- .get() defaults
+    those to "user" rather than crashing, so old accounts are safely denied
+    admin access instead of erroring out.
+    """
+    if current_user.get("role", "user") != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin privileges required",
+        )
+    return current_user
+
