@@ -9,9 +9,8 @@ router = APIRouter()
 @router.post("/admin/evaluate", status_code=200)
 async def trigger_evaluation(
     db = Depends(deps.get_db),
-    current_user: dict = Depends(deps.get_current_user)
+    current_user: dict = Depends(deps.require_admin)
 ):
-    # In real app, check for admin role here
     await update_all_portfolios_total_value(db)
     await generate_leaderboards(db)
     return {"message": "Evaluation triggered successfully"}

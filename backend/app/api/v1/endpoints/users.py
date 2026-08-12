@@ -53,7 +53,8 @@ def register_user(request: Request, user: UserCreate, db=Depends(get_db)):
         "id": user_id,
         "email": user.email,
         "username": user.username,
-        "hashed_password": hashed_password
+        "hashed_password": hashed_password,
+        "role": "user"
     }
 
     new_portfolio = PortfolioInDB(

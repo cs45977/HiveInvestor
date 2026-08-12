@@ -1,17 +1,30 @@
 <script setup>
 import { RouterView, useRouter } from 'vue-router'
 import { ref, onMounted, watch } from 'vue'
+import { getCurrentUser } from '@/services/auth'
 
 const router = useRouter()
 const isLoggedIn = ref(false)
+const isAdmin = ref(false)
 
-const checkLoginStatus = () => {
+const checkLoginStatus = async () => {
   isLoggedIn.value = !!localStorage.getItem('token')
+  if (isLoggedIn.value) {
+    try {
+      const user = await getCurrentUser()
+      isAdmin.value = user?.role === 'admin'
+    } catch (err) {
+      isAdmin.value = false
+    }
+  } else {
+    isAdmin.value = false
+  }
 }
 
 const logout = () => {
   localStorage.removeItem('token')
   isLoggedIn.value = false
+  isAdmin.value = false
   router.push('/login')
 }
 
@@ -38,6 +51,7 @@ watch(() => router.currentRoute.value, () => {
           <RouterLink to="/dashboard">Dashboard</RouterLink>
           <RouterLink to="/trade">Trade</RouterLink>
           <RouterLink to="/leaderboard">Leaderboard</RouterLink>
+          <RouterLink v-if="isAdmin" to="/admin">Admin</RouterLink>
           <a href="#" @click.prevent="logout">Logout</a>
         </template>
       </nav>
@@ -46,6 +60,7 @@ watch(() => router.currentRoute.value, () => {
 
   <RouterView />
 </template>
+
 
 <style scoped>
 nav {
