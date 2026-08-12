@@ -19,20 +19,21 @@ def get_mock_db():
 
 def test_register_user_success():
     mock_db = MagicMock()
-    # Setup mock for user check (user does not exist)
-    mock_collection = mock_db.collection.return_value
-    mock_collection.where.return_value.stream.return_value = []
-    
+    # Setup mock: email index doc does NOT exist -> registration proceeds
+    mock_email_doc = MagicMock()
+    mock_email_doc.exists = False
+    mock_db.collection.return_value.document.return_value.get.return_value = mock_email_doc
+
     app.dependency_overrides[get_db] = lambda: mock_db
-    
+
     payload = {
         "email": "newuser@example.com",
         "username": "newuser",
         "password": "strongpassword123"
     }
-    
+
     response = client.post("/api/v1/users/register", json=payload)
-    
+
     assert response.status_code == 201
     data = response.json()
     assert data["email"] == payload["email"]
@@ -42,25 +43,33 @@ def test_register_user_success():
 
 def test_register_user_duplicate_email():
     mock_db = MagicMock()
-    mock_collection = mock_db.collection.return_value
-    # Simulate existing user found
-    mock_collection.where.return_value.stream.return_value = ["existing_user_doc"]
-    
+    # Setup mock: email index doc DOES exist -> registration blocked
+    mock_email_doc = MagicMock()
+    mock_email_doc.exists = True
+    mock_db.collection.return_value.document.return_value.get.return_value = mock_email_doc
+
     app.dependency_overrides[get_db] = lambda: mock_db
-    
+
     payload = {
         "email": "existing@example.com",
         "username": "existing",
         "password": "password"
     }
-    
+
     response = client.post("/api/v1/users/register", json=payload)
-    
+
     assert response.status_code == 400
     assert response.json()["detail"] == "Email already registered"
 
 def test_register_user_missing_fields():
-    # No DB mock needed as validation happens before DB
+    # Pydantic body validation for UserCreate happens in solve_dependencies
+    # alongside other Depends() params — including get_db — so a DB mock is
+    # still required here even though we expect a 422 before any Firestore
+    # call actually happens. This was previously masked by the (now-fixed)
+    # dependency_overrides leak from an earlier test in the suite.
+    mock_db = MagicMock()
+    app.dependency_overrides[get_db] = lambda: mock_db
+
     payload = {
         "email": "incomplete@example.com",
         "username": "incomplete"

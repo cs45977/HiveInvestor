@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from unittest.mock import patch, AsyncMock
 import sys
 import os
+import pytest
 
 # Add backend directory to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -18,7 +19,12 @@ client = TestClient(app)
 def mock_get_current_user():
     return {"id": "test_user_id", "email": "test@example.com"}
 
-app.dependency_overrides[get_current_user] = mock_get_current_user
+@pytest.fixture(autouse=True)
+def _override_current_user():
+    # Setup only — conftest.py's autouse fixture clears overrides after each
+    # test, so this needs to reapply before every test rather than relying
+    # on a one-time module-level assignment.
+    app.dependency_overrides[get_current_user] = mock_get_current_user
 
 def test_get_quote_endpoint_success():
     mock_quote = StockQuote(
