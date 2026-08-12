@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from unittest.mock import MagicMock, patch, AsyncMock
 import sys
 import os
+import pytest
 
 # Add backend directory to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -20,8 +21,13 @@ def mock_get_current_user():
 def mock_get_db():
     return MagicMock()
 
-app.dependency_overrides[get_current_user] = mock_get_current_user
-app.dependency_overrides[get_db] = mock_get_db
+@pytest.fixture(autouse=True)
+def _override_deps():
+    # Setup only — conftest.py's autouse fixture clears overrides after each
+    # test, so this needs to reapply before every test rather than relying
+    # on a one-time module-level assignment.
+    app.dependency_overrides[get_current_user] = mock_get_current_user
+    app.dependency_overrides[get_db] = mock_get_db
 
 def test_buy_stock_success():
     # Mock result from service

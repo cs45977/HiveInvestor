@@ -1,14 +1,17 @@
 from datetime import timedelta
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from app.core import security
 from app.core.config import settings
 from app.db.firestore import get_db
+from app.core.limiter import limiter
 
 router = APIRouter()
 
 @router.post("/users/login")
+@limiter.limit("5/minute")
 def login_access_token(
+    request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     db = Depends(get_db)
 ):

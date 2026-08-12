@@ -1,4 +1,5 @@
 venv/
+.venv/
 host_venv/
 __pycache__/
 *.pyc
@@ -6,4 +7,11 @@ __pycache__/
 .env
 
 firebase_data/
+firebase-data/
+firestore-debug.log
 backend/gcp_credentials.json
+
+.idea/
+.vagrant/
+*.iml
+
