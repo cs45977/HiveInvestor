@@ -29,3 +29,15 @@ export const login = async (email, password) => {
 
     return response.data
 }
+
+export const getCurrentUser = async () => {
+    const token = localStorage.getItem('token')
+    if (!token) return null
+
+    const response = await axios.get(`${API_URL}/users/me`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    return response.data
+}
